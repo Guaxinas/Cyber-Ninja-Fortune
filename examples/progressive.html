@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="apple-touch-icon" sizes="76x76" href="../assets/img//apple-icon.png">
+  <link rel="icon" type="image/png" href="../assets/img//favicon.png">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>Metrix - Configuração de Progressivo</title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="../assets/css/paper-dashboard.css?v=2.1.1" rel="stylesheet" />
+  <link href="../assets/demo/demo.css" rel="stylesheet" />
+  <style>
+    /* Typography improvements for progressive page */
+    body { font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; font-size:15px; line-height:1.5; color:#263238; }
+    h1,h2,h3,h4,h5 { font-weight:600; color:#1b2b34; }
+    .card .card-title { font-weight:600; font-size:1.05rem; }
+    .table thead th { font-weight:600; font-size:0.95rem; }
+    .table td, .table th { font-size:0.95rem; }
+    .list-group-item { font-size:0.95rem; }
+    small { font-size:0.85rem; }
+    .navbar .navbar-brand { font-weight:600; }
+  </style>
+</head>
+
+<body class="">
+  <div class="wrapper ">
+    <div class="sidebar" data-color="default" data-active-color="danger">
+      <div class="logo">
+        <a href="#" class="simple-text logo-mini">
+          <div class="logo-image-small">
+            <img src="../assets/img/logo-small.png">
+          </div>
+        </a>
+        <a href="#" class="simple-text logo-normal">Metrix</a>
+      </div>
+      <div class="sidebar-wrapper">
+        <!-- Minimal sidebar for examples; keep links consistent with dashboard -->
+        <ul class="nav">
+          <li>
+            <a href="../examples/dashboard.html">
+              <i class="nc-icon nc-bank"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li class="active">
+            <a href="../examples/progressive.html">
+              <i class="nc-icon nc-settings-gear-65"></i>
+              <p>Progressivo</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="main-panel">
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <a class="navbar-brand" href="javascript:;">Configuração de Progressivo</a>
+          </div>
+        </div>
+      </nav>
+      <!-- End Navbar -->
+
+      <div class="content">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">Parâmetros do Servidor</h5>
+                <p class="card-category">Ajuste os parâmetros do servidor de progressivos</p>
+              </div>
+              <div class="card-body">
+                <form id="progressive-form">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="country">País / Região</label>
+                        <select id="country" class="selectpicker form-control" data-style="btn btn-link">
+                          <option value="GT">Guatemala</option>
+                          <option value="CR">Costa Rica</option>
+                          <option value="MX">México</option>
+                          <option value="BR">Brasil</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="server-name">Nome do Servidor</label>
+                        <input id="server-name" type="text" class="form-control" placeholder="Servidor A" required>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status" class="form-control">
+                          <option value="active">Ativo</option>
+                          <option value="inactive">Inativo</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="base-value">Valor Base</label>
+                        <input id="base-value" type="number" step="0.01" class="form-control" placeholder="0.00" required>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="increment">Incremento (%)</label>
+                        <input id="increment" type="number" step="0.01" class="form-control" placeholder="0.00" required>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12 text-right">
+                      <button id="save-btn" type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">Histórico de Alterações</h5>
+                <p class="card-category">Logs das modificações (usuário, data, ação)</p>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="logs-table" class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Usuário</th>
+                        <th>Data / Hora</th>
+                        <th>Ação</th>
+                        <th>Detalhes</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Rows populated by JS -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Progressivo Details (added PRD content) -->
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">TrueAdministração</h5>
+                <p class="card-category">Informações e recursos relacionados ao servidor de progressivos</p>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <ul class="list-unstyled">
+                      <li><strong>Autor:</strong> Igor Sarmento</li>
+                      <li><strong>Painel:</strong> Metrix</li>
+                      <li><strong>Agentes</strong></li>
+                      <li><strong>Jogadores</strong></li>
+                      <li><strong>Sessões</strong></li>
+                      <li><strong>Rodadas</strong></li>
+                      <li><strong>Terminais</strong></li>
+                      <li><strong>Repositório de software</strong></li>
+                      <li><strong>Relatórios</strong></li>
+                      <li><strong>Últimos Jackpots</strong></li>
+                      <li><strong>Links</strong></li>
+                      <li><strong>Logs de auditoria</strong></li>
+                      <li><strong>Configurações do Servidor</strong></li>
+                    </ul>
+                  </div>
+                  <div class="col-md-6">
+                    <p><strong>Softwares</strong></p>
+                    <p class="text-muted small">Last update check: <strong>25 de Setembro de 2025 às 17:14</strong><br>
+                      Last change in software selection: <strong>25 de Setembro de 2025 às 17:12</strong><br>
+                      Current status: <strong>Finished successfully</strong><br>
+                      Automatic updates are turned off
+                    </p>
+
+                    <p><strong>Software Collection:</strong><br>
+                      Regular software for Pix Real Online (production)
+                    </p>
+
+                    <p><strong>Terminals:</strong></p>
+                    <div class="card card-plain">
+                      <div class="card-body">
+                        <p class="small text-monospace" style="white-space:pre-wrap;">7543658474 - 7541488240 - 7525720432 - 7562181386 - 7501154364 - 7516362358 - 7537838646 - 7585475803 - 7577228758 - 7567843673 - 7536083326 - 7547470307 - 7565357062 - 7567076572 - 7585582267 - 7575214572 - 7558870445 - 7581777557 - 7502805311 - 7532785532 - 7543205212 - 7514175567 - 7518851263 - 7562228761 - 7535085258 - 7540046470 - 7550157222 - 7551745254 - 7573031861 - 7517704441 - 7564106031 - 7585323531 - 7561172781 - 7571040504 - 7573176081 - 7537707554 - 7576106560 - 7501803355 - 7574535852 - 7500034437 - 7515064460 - 7526855845 - 7586635851 - 7572207502 - 7522534702 - 7585437156 - 7551073814 - 7504264707 - 7515781183 - 7570810104 - 7573334303 - 7574245110 - 7507162442 - 7563513066 - 7558284372 - 7501136502 - 7510275764 - 7528524360 - 7552545210</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <hr>
+
+                <div class="row">
+                  <div class="col-12">
+                    <p class="mb-1"><strong>Lista de Softwares</strong></p>
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Software</th>
+                            <th>Nome do pacote Debian</th>
+                            <th>Número da Versão</th>
+                            <th>Descrição</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>IGX Base files</td>
+                            <td>igx-base</td>
+                            <td>1.7.14</td>
+                            <td>IGX OS Scripts Installer</td>
+                          </tr>
+                          <tr>
+                            <td>Multigames Client</td>
+                            <td>multigames.client.app</td>
+                            <td>2.3.2</td>
+                            <td>Displays lobby and games, and manages system operations</td>
+                          </tr>
+                          <tr>
+                            <td>OMS Lite</td>
+                            <td>omslite</td>
+                            <td>1.0.3</td>
+                            <td>Lite version of the Ortiz Media Screen,</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>Mostrando de 1 até 3 de 3 registros</div>
+                      <nav aria-label="Page navigation example">
+                        <ul class="pagination pagination-sm mb-0">
+                          <li class="page-item disabled"><a class="page-link" href="#">Primeiro</a></li>
+                          <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
+                          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                          <li class="page-item disabled"><a class="page-link" href="#">Próximo</a></li>
+                          <li class="page-item disabled"><a class="page-link" href="#">Último</a></li>
+                        </ul>
+                      </nav>
+                    </div>
+
+                    <p class="text-muted small mt-3">Admin System Version <strong>3.18.7</strong></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-md-4">
+            <div class="card card-user">
+              <div class="card-body">
+                <p class="card-text">Status atual do servidor de progressivos</p>
+                <div class="author">
+                  <div class="block block-one"></div>
+                  <div class="block block-two"></div>
+                  <div class="block block-three"></div>
+                  <div class="block block-four"></div>
+                  <h5 class="title" id="server-title">Servidor A</h5>
+                  <p class="description" id="server-status">— Carregando —</p>
+                </div>
+                <div class="card-description">
+                  <ul class="list-unstyled">
+                    <li><strong>País:</strong> <span id="server-country">—</span></li>
+                    <li><strong>Valor atual:</strong> <span id="server-current-value">—</span></li>
+                    <li><strong>Última atualização:</strong> <span id="server-updated-at">—</span></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="button-container">
+                  <button id="reload-status" class="btn btn-sm btn-info">Recarregar</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title">Permissões</h5>
+              </div>
+              <div class="card-body">
+                <p class="card-category">Verificação de permissão do usuário</p>
+                <div id="perm-area">
+                  <!-- Placeholder: real check depends on backend -->
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="has-perm" disabled>
+                    <label class="form-check-label" for="has-perm">Usuário tem permissão (progressive_admin)</label>
+                  </div>
+                  <p class="text-muted small">O botão "Salvar" será habilitado somente se o usuário tiver permissão.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer footer-black  footer-white ">
+        <div class="container-fluid">
+          <div class="row">
+            <nav class="footer-nav">
+              <ul>
+                <li><a href="#">Metrix</a></li>
+              </ul>
+            </nav>
+            <div class="credits ml-auto">
+              <span class="copyright">© <script>document.write(new Date().getFullYear())</script>, Metrix</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Core JS Files -->
+  <script src="../assets/js/core/jquery.min.js"></script>
+  <script src="../assets/js/core/popper.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <script src="../assets/js/plugins/moment.min.js"></script>
+  <script src="../assets/js/plugins/bootstrap-switch.js"></script>
+  <script src="../assets/js/plugins/sweetalert2.min.js"></script>
+  <script src="../assets/js/plugins/jquery.validate.min.js"></script>
+  <script src="../assets/js/plugins/jquery.bootstrap-wizard.js"></script>
+  <script src="../assets/js/plugins/bootstrap-selectpicker.js"></script>
+  <script src="../assets/js/plugins/bootstrap-datetimepicker.js"></script>
+  <script src="../assets/js/plugins/jquery.dataTables.min.js"></script>
+  <script src="../assets/js/plugins/bootstrap-tagsinput.js"></script>
+  <script src="../assets/js/plugins/jasny-bootstrap.min.js"></script>
+  <script src="../assets/js/plugins/chartjs.min.js"></script>
+  <script src="../assets/js/plugins/bootstrap-notify.js"></script>
+  <script src="../assets/js/paper-dashboard.min.js?v=2.1.1" type="text/javascript"></script>
+  <script src="../assets/demo/demo.js"></script>
+
+  <script>
+    // Minimal client-side logic to satisfy PRD front-end requirements
+    const API_BASE = '/api/progressive'; // adjust to Metrix API
+
+    // Mock: get current user and permissions (replace with real auth)
+    function getCurrentUser() {
+      // In a real app, fetch user info from /api/me or decode JWT
+      return { username: 'admin.user', perms: ['progressive_admin'] };
+    }
+
+    function userHasPermission(user) {
+      return Array.isArray(user.perms) && user.perms.includes('progressive_admin');
+    }
+
+    function addLog(user, action, details) {
+      const tbody = document.querySelector('#logs-table tbody');
+      const tr = document.createElement('tr');
+      const now = new Date().toISOString();
+      tr.innerHTML = `<td>${user}</td><td>${now}</td><td>${action}</td><td>${details}</td>`;
+      tbody.prepend(tr);
+      // Try to persist to backend
+      fetch(API_BASE + '/logs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user, action, details, timestamp: now })
+      }).catch(() => {
+        // swallow errors for demo; logs still visible locally
+      });
+    }
+
+    async function fetchServerStatus() {
+      // Replace with real API call
+      try {
+        const res = await fetch(API_BASE + '/status');
+        if (!res.ok) throw new Error('Network response not ok');
+        const data = await res.json();
+        updateStatusCard(data);
+      } catch (e) {
+        // Demo fallback
+        updateStatusCard({ name: 'Servidor A', country: 'BR', value: '12345.67', updated_at: new Date().toISOString(), status: 'active' });
+      }
+    }
+
+    function updateStatusCard(data) {
+      document.getElementById('server-title').textContent = data.name || '—';
+      document.getElementById('server-status').textContent = data.status === 'active' ? 'Ativo' : 'Inativo';
+      document.getElementById('server-country').textContent = data.country || '—';
+      document.getElementById('server-current-value').textContent = data.value || '—';
+      document.getElementById('server-updated-at').textContent = data.updated_at || '—';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = getCurrentUser();
+      const hasPerm = userHasPermission(user);
+      // Set permission UI
+      document.getElementById('has-perm').checked = !!hasPerm;
+      // Enable or disable save button
+      const saveBtn = document.getElementById('save-btn');
+      saveBtn.disabled = !hasPerm;
+
+      // Load current status and logs (demo)
+      fetchServerStatus();
+
+      // wire reload
+      document.getElementById('reload-status').addEventListener('click', fetchServerStatus);
+
+      // handle form submit
+      document.getElementById('progressive-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        if (!hasPerm) {
+          Swal.fire('Acesso negado', 'Você não tem permissão para realizar essa ação.', 'error');
+          return;
+        }
+        const payload = {
+          country: document.getElementById('country').value,
+          server_name: document.getElementById('server-name').value,
+          status: document.getElementById('status').value,
+          base_value: parseFloat(document.getElementById('base-value').value || 0),
+          increment: parseFloat(document.getElementById('increment').value || 0)
+        };
+
+        // Basic validation
+        if (!payload.server_name) { Swal.fire('Erro', 'Nome do servidor é obrigatório', 'warning'); return; }
+
+        try {
+          const res = await fetch(API_BASE + '/configure', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' /*, 'Authorization': 'Bearer ...'*/ },
+            body: JSON.stringify(payload)
+          });
+
+          if (!res.ok) throw new Error('Falha na API');
+
+          const result = await res.json();
+          Swal.fire('Sucesso', 'Configuração aplicada com sucesso.', 'success');
+          addLog(user.username, 'CONFIG_APPLIED', JSON.stringify(payload));
+          // refresh status
+          fetchServerStatus();
+        } catch (err) {
+          // For demo, simulate success and log locally
+          addLog(user.username, 'CONFIG_APPLIED (local)', JSON.stringify(payload));
+          Swal.fire('Aviso', 'API indisponível. Alteração registrada localmente.', 'warning');
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>

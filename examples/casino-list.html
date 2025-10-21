@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Lista de Cassinos - Paper Dashboard 2 PRO</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    
+    <!-- Fonts and icons -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+    
+    <!-- CSS Files -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/paper-dashboard.css" rel="stylesheet" />
+    
+    <style>
+        .casino-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: white;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .casino-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+        }
+        
+        .casino-logo {
+            width: 80px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            background: #f8f9fa;
+        }
+        
+        .casino-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-maintenance {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .casino-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-number {
+            font-size: 18px;
+            font-weight: 600;
+            color: #3C4858;
+            margin-bottom: 2px;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            color: #9A9A9A;
+            text-transform: uppercase;
+        }
+        
+        .casino-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .casino-actions .btn {
+            flex: 1;
+            min-width: 140px;
+            font-size: 12px;
+        }
+        
+        .casino-actions .btn-icon-only {
+            flex: none;
+            min-width: auto;
+            width: 38px;
+        }
+        
+        .subdomain-info {
+            font-size: 11px;
+            color: #666;
+            background: #f8f9fa;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        
+        .subdomain-info i {
+            margin-right: 4px;
+            color: #999;
+        }
+        
+        .search-filters {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .filter-group {
+            margin-bottom: 15px;
+        }
+        
+        .filter-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .quick-stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .quick-stats .row {
+            align-items: center;
+        }
+        
+        .quick-stat-item {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .quick-stat-number {
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 5px;
+        }
+        
+        .quick-stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+        
+        .add-casino-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #51cbce;
+            border: none;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 20px rgba(81, 203, 206, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .add-casino-btn:hover {
+            background: #45b7ba;
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(81, 203, 206, 0.6);
+        }
+        
+        .casino-type-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background: #e9ecef;
+            color: #6c757d;
+            margin-left: 8px;
+        }
+        
+        .last-activity {
+            font-size: 12px;
+            color: #9A9A9A;
+            margin-top: 5px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9A9A9A;
+        }
+        
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar" data-color="white" data-active-color="danger">
+            <div class="logo">
+                <a href="#" class="simple-text logo-mini">
+                    <div class="logo-image-small">
+                        <img src="../assets/img/logo-small.png">
+                    </div>
+                </a>
+                <a href="#" class="simple-text logo-normal">
+                    Cassino Admin
+                </a>
+            </div>
+            <div class="sidebar-wrapper">
+                <ul class="nav">
+                    <li>
+                        <a href="./dashboard.html">
+                            <i class="nc-icon nc-bank"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="./casino-list.html">
+                            <i class="nc-icon nc-diamond"></i>
+                            <p>Lista de Cassinos</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./user.html">
+                            <i class="nc-icon nc-single-02"></i>
+                            <p>Usuários</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="main-panel">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+                <div class="container-fluid">
+                    <div class="navbar-wrapper">
+                        <div class="navbar-toggle">
+                            <button type="button" class="navbar-toggler">
+                                <span class="navbar-toggler-bar bar1"></span>
+                                <span class="navbar-toggler-bar bar2"></span>
+                                <span class="navbar-toggler-bar bar3"></span>
+                            </button>
+                        </div>
+                        <a class="navbar-brand" href="javascript:;">Lista de Cassinos</a>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-bar navbar-kebab"></span>
+                        <span class="navbar-toggler-bar navbar-kebab"></span>
+                        <span class="navbar-toggler-bar navbar-kebab"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="nc-icon nc-single-02"></i>
+                                    Admin User
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" href="#">Perfil</a>
+                                    <a class="dropdown-item" href="#">Configurações</a>
+                                    <a class="dropdown-item" href="#">Sair</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="content">
+                <!-- Estatísticas Rápidas -->
+                <div class="quick-stats">
+                    <div class="row">
+                        <div class="col-md-3 col-6">
+                            <div class="quick-stat-item">
+                                <div class="quick-stat-number" id="totalCasinos">0</div>
+                                <div class="quick-stat-label">Total de Cassinos</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="quick-stat-item">
+                                <div class="quick-stat-number" id="activeCasinos">0</div>
+                                <div class="quick-stat-label">Ativos</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="quick-stat-item">
+                                <div class="quick-stat-number" id="maintenanceCasinos">0</div>
+                                <div class="quick-stat-label">Em Manutenção</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="quick-stat-item">
+                                <div class="quick-stat-number" id="totalGamesGlobal">0</div>
+                                <div class="quick-stat-label">Total de Jogos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filtros de Busca -->
+                <div class="search-filters">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="filter-group">
+                                <label for="searchInput"><strong>Buscar Cassino</strong></label>
+                                <input type="text" id="searchInput" class="form-control" placeholder="Nome do cassino..." onkeyup="filterCasinos()">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="filter-group">
+                                <label for="statusFilter"><strong>Status</strong></label>
+                                <select id="statusFilter" class="form-control" onchange="filterCasinos()">
+                                    <option value="all">Todos os Status</option>
+                                    <option value="active">Ativo</option>
+                                    <option value="inactive">Inativo</option>
+                                    <option value="maintenance">Manutenção</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="filter-group">
+                                <label for="typeFilter"><strong>Tipo</strong></label>
+                                <select id="typeFilter" class="form-control" onchange="filterCasinos()">
+                                    <option value="all">Todos os Tipos</option>
+                                    <option value="premium">Premium</option>
+                                    <option value="standard">Standard</option>
+                                    <option value="basic">Básico</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="filter-group">
+                                <label>&nbsp;</label>
+                                <button class="btn btn-outline-secondary btn-block" onclick="clearFilters()">
+                                    <i class="nc-icon nc-refresh-69"></i> Limpar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de Cassinos -->
+                <div class="row" id="casinosList">
+                    <!-- Cassinos serão carregados aqui -->
+                </div>
+
+                <!-- Estado vazio -->
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <i class="nc-icon nc-diamond"></i>
+                    <h3>Nenhum cassino encontrado</h3>
+                    <p>Não há cassinos que correspondam aos filtros selecionados.</p>
+                </div>
+            </div>
+
+            <footer class="footer footer-black footer-white">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="credits ml-auto">
+                            <span class="copyright">
+                                © <script>document.write(new Date().getFullYear())</script> Sistema de Gerenciamento de Cassino
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Botão flutuante para adicionar cassino -->
+    <button class="add-casino-btn" onclick="addNewCasino()" title="Adicionar Novo Cassino">
+        <i class="nc-icon nc-simple-add"></i>
+    </button>
+
+    <!-- Core JS Files -->
+    <script src="../assets/js/core/jquery.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+    <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+    
+    <!-- Paper Dashboard CORE methods -->
+    <script src="../assets/js/paper-dashboard.min.js"></script>
+
+    <script>
+        // Mock data para cassinos
+        let casinosData = [
+            {
+                id: 1,
+                name: "Golden Palace Casino",
+                subdomain: "goldenpalace.casino-platform.com",
+                logo: "../assets/img/faces/face-1.jpg",
+                status: "active",
+                type: "premium",
+                totalGames: 245,
+                activeGames: 230,
+                totalPlayers: 12500,
+                monthlyRevenue: 2850000,
+                lastActivity: new Date(Date.now() - 2 * 60 * 60 * 1000),
+                description: "Cassino premium com jogos exclusivos",
+                url: "https://goldenpalace.com"
+            },
+            {
+                id: 2,
+                name: "Diamond Slots Resort",
+                subdomain: "diamondslots.casino-platform.com",
+                logo: "../assets/img/faces/face-2.jpg",
+                status: "active",
+                type: "standard",
+                totalGames: 189,
+                activeGames: 175,
+                totalPlayers: 8900,
+                monthlyRevenue: 1950000,
+                lastActivity: new Date(Date.now() - 30 * 60 * 1000),
+                description: "Especializado em slots e bingo",
+                url: "https://diamondslots.com"
+            },
+            {
+                id: 3,
+                name: "Royal Casino Club",
+                subdomain: "royalclub.casino-platform.com",
+                logo: "../assets/img/faces/face-3.jpg",
+                status: "maintenance",
+                type: "premium",
+                totalGames: 312,
+                activeGames: 0,
+                totalPlayers: 15600,
+                monthlyRevenue: 3200000,
+                lastActivity: new Date(Date.now() - 6 * 60 * 60 * 1000),
+                description: "Em manutenção programada",
+                url: "https://royalclub.com"
+            },
+            {
+                id: 4,
+                name: "Lucky Stars Casino",
+                subdomain: "luckystars.casino-platform.com",
+                logo: "../assets/img/faces/face-4.jpg",
+                status: "active",
+                type: "basic",
+                totalGames: 98,
+                activeGames: 85,
+                totalPlayers: 4200,
+                monthlyRevenue: 890000,
+                lastActivity: new Date(Date.now() - 45 * 60 * 1000),
+                description: "Cassino para iniciantes",
+                url: "https://luckystars.com"
+            },
+            {
+                id: 5,
+                name: "Ace High Casino",
+                subdomain: "acehigh.casino-platform.com",
+                logo: "../assets/img/faces/face-5.jpg",
+                status: "inactive",
+                type: "standard",
+                totalGames: 156,
+                activeGames: 0,
+                totalPlayers: 6800,
+                monthlyRevenue: 0,
+                lastActivity: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+                description: "Temporariamente inativo",
+                url: "https://acehigh.com"
+            },
+            {
+                id: 6,
+                name: "Vegas Dreams Casino",
+                subdomain: "vegasdreams.casino-platform.com",
+                logo: "../assets/img/faces/face-6.jpg",
+                status: "active",
+                type: "premium",
+                totalGames: 278,
+                activeGames: 265,
+                totalPlayers: 18900,
+                monthlyRevenue: 4100000,
+                lastActivity: new Date(Date.now() - 15 * 60 * 1000),
+                description: "A experiência completa de Las Vegas",
+                url: "https://vegasdreams.com"
+            }
+        ];
+
+        let filteredCasinos = [...casinosData];
+
+        // Inicialização da página
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCasinos();
+            updateQuickStats();
+        });
+
+        // Renderiza a lista de cassinos
+        function renderCasinos() {
+            const casinosList = document.getElementById('casinosList');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (filteredCasinos.length === 0) {
+                casinosList.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            
+            casinosList.innerHTML = filteredCasinos.map(casino => `
+                <div class="col-lg-6 col-xl-4">
+                    <div class="casino-card">
+                        <div class="casino-status">
+                            <span class="status-badge status-${casino.status}">
+                                ${getStatusName(casino.status)}
+                            </span>
+                        </div>
+                        
+                        <div class="d-flex align-items-start">
+                            <img src="${casino.logo}" class="casino-logo" alt="${casino.name}">
+                            <div class="ml-3 flex-grow-1">
+                                <h5 class="mb-1">
+                                    ${casino.name}
+                                    <span class="casino-type-badge">${getTypeName(casino.type)}</span>
+                                </h5>
+                                <p class="text-muted mb-1">${casino.description}</p>
+                                <div class="subdomain-info">
+                                    <i class="nc-icon nc-world-2"></i>
+                                    ${casino.subdomain}
+                                </div>
+                                <div class="last-activity">
+                                    Última atividade: ${formatRelativeTime(casino.lastActivity)}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="casino-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">${casino.activeGames}</div>
+                                <div class="stat-label">Jogos Ativos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">${formatNumber(casino.totalPlayers)}</div>
+                                <div class="stat-label">Jogadores</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">${formatCurrency(casino.monthlyRevenue)}</div>
+                                <div class="stat-label">Receita/Mês</div>
+                            </div>
+                        </div>
+                        
+                        <div class="casino-actions">
+                            <button class="btn btn-primary btn-sm" onclick="manageCasino(${casino.id})" title="Configurar Cassino">
+                                <i class="nc-icon nc-settings-gear-65"></i> Configurar Cassino
+                            </button>
+                            <button class="btn btn-info btn-sm" onclick="configureDomain(${casino.id})" title="Configurar Domínio">
+                                <i class="nc-icon nc-world-2"></i> Configurar Domínio
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm btn-icon-only" onclick="viewDetails(${casino.id})" title="Ver Detalhes">
+                                <i class="nc-icon nc-zoom-split"></i>
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm btn-icon-only" onclick="toggleStatus(${casino.id})" title="Alterar Status">
+                                <i class="nc-icon nc-button-power"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Obtém o nome do status
+        function getStatusName(status) {
+            const statusNames = {
+                'active': 'Ativo',
+                'inactive': 'Inativo',
+                'maintenance': 'Manutenção'
+            };
+            return statusNames[status] || status;
+        }
+
+        // Obtém o nome do tipo
+        function getTypeName(type) {
+            const typeNames = {
+                'premium': 'Premium',
+                'standard': 'Standard',
+                'basic': 'Básico'
+            };
+            return typeNames[type] || type;
+        }
+
+        // Formata números
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // Formata moeda
+        function formatCurrency(amount) {
+            if (amount === 0) return 'R$ 0';
+            if (amount >= 1000000) {
+                return 'R$ ' + (amount / 1000000).toFixed(1) + 'M';
+            } else if (amount >= 1000) {
+                return 'R$ ' + (amount / 1000).toFixed(0) + 'K';
+            }
+            return 'R$ ' + amount.toLocaleString('pt-BR');
+        }
+
+        // Formata tempo relativo
+        function formatRelativeTime(date) {
+            const now = new Date();
+            const diff = now - new Date(date);
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+
+            if (minutes < 60) {
+                return `${minutes} min atrás`;
+            } else if (hours < 24) {
+                return `${hours}h atrás`;
+            } else {
+                return `${days} dias atrás`;
+            }
+        }
+
+        // Atualiza estatísticas rápidas
+        function updateQuickStats() {
+            const total = casinosData.length;
+            const active = casinosData.filter(c => c.status === 'active').length;
+            const maintenance = casinosData.filter(c => c.status === 'maintenance').length;
+            const totalGames = casinosData.reduce((sum, c) => sum + c.totalGames, 0);
+
+            document.getElementById('totalCasinos').textContent = total;
+            document.getElementById('activeCasinos').textContent = active;
+            document.getElementById('maintenanceCasinos').textContent = maintenance;
+            document.getElementById('totalGamesGlobal').textContent = formatNumber(totalGames);
+        }
+
+        // Filtra cassinos
+        function filterCasinos() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+
+            filteredCasinos = casinosData.filter(casino => {
+                const matchesSearch = casino.name.toLowerCase().includes(searchTerm) ||
+                                    casino.description.toLowerCase().includes(searchTerm);
+                const matchesStatus = statusFilter === 'all' || casino.status === statusFilter;
+                const matchesType = typeFilter === 'all' || casino.type === typeFilter;
+
+                return matchesSearch && matchesStatus && matchesType;
+            });
+
+            renderCasinos();
+        }
+
+        // Limpa filtros
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').value = 'all';
+            document.getElementById('typeFilter').value = 'all';
+            filteredCasinos = [...casinosData];
+            renderCasinos();
+        }
+
+        // Gerencia cassino específico
+        function manageCasino(casinoId) {
+            const casino = casinosData.find(c => c.id === casinoId);
+            if (casino) {
+                // Redireciona para a página de gerenciamento específica (configurações administrativas)
+                window.location.href = `casino-management.html?casino=${casinoId}&name=${encodeURIComponent(casino.name)}`;
+            }
+        }
+
+        // Configura domínio do cassino
+        function configureDomain(casinoId) {
+            const casino = casinosData.find(c => c.id === casinoId);
+            if (casino) {
+                // Redireciona para a tela de gestão de domínios
+                window.location.href = `domain-management.html?casino=${casinoId}&name=${encodeURIComponent(casino.name)}&subdomain=${encodeURIComponent(casino.subdomain)}`;
+            }
+        }
+
+        // Visualiza detalhes do cassino
+        function viewDetails(casinoId) {
+            const casino = casinosData.find(c => c.id === casinoId);
+            if (casino) {
+                alert(`Detalhes do ${casino.name}:\n\n` +
+                      `Status: ${getStatusName(casino.status)}\n` +
+                      `Tipo: ${getTypeName(casino.type)}\n` +
+                      `Subdomínio: ${casino.subdomain}\n` +
+                      `Total de Jogos: ${casino.totalGames}\n` +
+                      `Jogos Ativos: ${casino.activeGames}\n` +
+                      `Jogadores: ${casino.totalPlayers.toLocaleString('pt-BR')}\n` +
+                      `Receita Mensal: ${formatCurrency(casino.monthlyRevenue)}\n` +
+                      `URL: ${casino.url}`);
+            }
+        }
+
+        // Alterna status do cassino
+        function toggleStatus(casinoId) {
+            const casino = casinosData.find(c => c.id === casinoId);
+            if (casino) {
+                const currentStatus = casino.status;
+                let newStatus;
+                
+                if (currentStatus === 'active') {
+                    newStatus = 'inactive';
+                } else if (currentStatus === 'inactive') {
+                    newStatus = 'active';
+                } else {
+                    alert('Cassino em manutenção não pode ter status alterado automaticamente.');
+                    return;
+                }
+                
+                if (confirm(`Deseja alterar o status do ${casino.name} de "${getStatusName(currentStatus)}" para "${getStatusName(newStatus)}"?`)) {
+                    casino.status = newStatus;
+                    casino.lastActivity = new Date();
+                    
+                    // Atualiza jogos ativos se inativo
+                    if (newStatus === 'inactive') {
+                        casino.activeGames = 0;
+                        casino.monthlyRevenue = 0;
+                    } else {
+                        casino.activeGames = Math.floor(casino.totalGames * 0.9); // 90% dos jogos ativos
+                    }
+                    
+                    renderCasinos();
+                    updateQuickStats();
+                }
+            }
+        }
+
+        // Adiciona novo cassino
+        function addNewCasino() {
+            alert('Funcionalidade de adicionar novo cassino em desenvolvimento.\n\nEsta tela abriria um modal ou nova página para cadastro de cassino.');
+        }
+
+        // Simula atualização de dados em tempo real
+        setInterval(() => {
+            // Atualiza última atividade dos cassinos ativos aleatoriamente
+            casinosData.forEach(casino => {
+                if (casino.status === 'active' && Math.random() < 0.1) { // 10% de chance
+                    casino.lastActivity = new Date();
+                }
+            });
+            
+            // Re-renderiza apenas se estamos mostrando todos os cassinos
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput && searchInput.value === '' && 
+                document.getElementById('statusFilter').value === 'all' && 
+                document.getElementById('typeFilter').value === 'all') {
+                renderCasinos();
+            }
+        }, 30000); // Atualiza a cada 30 segundos
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Shinobi Slot - Cyberpunk Casino</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-label">Credits</div>
+                <div class="stat-value" id="credits">1000</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Win</div>
+                <div class="stat-value" id="win-amount">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Multiplier</div>
+                <div class="stat-value" id="multiplier">1x</div>
+            </div>
+        </div>
+
+        <canvas id="game-canvas"></canvas>
+
+        <div class="controls">
+            <div class="row">
+                <div class="col">
+                    <label for="bet-amount">Bet Amount</label>
+                    <select id="bet-amount" class="form-control">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+                <div class="col text-center">
+                    <button id="spin-button" class="btn-spin">SPIN</button>
+                </div>
+                <div class="col text-right">
+                    <div class="payline-info">
+                        <span>Paylines: 25</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Cyber Hack Bonus -->
+    <div id="bonus-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>CYBER HACK BONUS</h2>
+            <div class="firewall-grid">
+                <!-- Dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="game.js"></script>
+</body>
+</html>

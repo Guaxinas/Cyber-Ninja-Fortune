@@ -1,0 +1,713 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Meu Perfil - Faria Gaming</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    
+    <!-- Fonts and icons -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    
+    <!-- CSS Files -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/paper-dashboard.css" rel="stylesheet" />
+    
+    <style>
+        body {
+            background: #002c1c;
+            font-family: 'Montserrat', sans-serif;
+            color: #ffffff;
+        }
+
+        .wrapper {
+            padding-top: 70px;
+            background: #002c1c;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: linear-gradient(to right, #002c1c, #004d33);
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,44,28,0.3);
+        }
+
+        .header-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 30px;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .ortiz-logo {
+            height: 50px;
+            width: auto;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .brand:hover .ortiz-logo {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        .user-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .action-button {
+            background: #006837;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,104,55,0.4);
+            background: #008d4c;
+        }
+
+        .balance {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .balance i {
+            color: #00c853;
+        }
+
+        .amount {
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .profile-toggle {
+            background: none;
+            border: none;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .profile-toggle:hover {
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+        }
+
+        .user-avatar i {
+            font-size: 24px;
+            color: #00c853;
+        }
+
+        .user-name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* Form Input Styles */
+        .form-control {
+            background-color: #002c1c !important;
+            border: 1px solid #003d29 !important;
+            border-radius: 10px !important;
+            color: #ffffff !important;
+            padding: 12px 15px !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 2px #004d33 !important;
+            border-color: #004d33 !important;
+            background-color: #002f1f !important;
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        .form-label {
+            color: #ffffff;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 10px;
+            background: #004d40;
+            border-radius: 8px;
+            padding: 8px 0;
+            box-shadow: 0 4px 20px rgba(0,77,64,0.2);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .menu-item {
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.3s ease;
+            font-size: 14px;
+        }
+
+        .menu-item:hover {
+            background: rgba(0,200,83,0.1);
+        }
+
+        .menu-item i {
+            width: 20px;
+            color: #00c853;
+            text-align: center;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 8px 0;
+        }
+
+        .profile-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .profile-header {
+            background: rgba(0,44,28,0.8);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #006837;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            border: 3px solid #008d4c;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-email {
+            color: #888;
+            margin-bottom: 1rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #006837;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .profile-sections {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: stretch;
+        }
+
+        .profile-section {
+            background: #003d29;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            border: 1px solid #004d33;
+            transition: all 0.3s ease;
+            flex: 1 1 360px;
+            min-width: 300px;
+        }
+
+        .profile-section:hover {
+            box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+            border-color: #006837;
+        }
+
+        /* Collapse children when section is collapsed */
+        .profile-section.collapsed > *:not(.section-title) { display: none; }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Accordion styles */
+        .section-title {
+            font-size: 1.2rem;
+            margin: 0;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .section-title .title-left { display: inline-flex; align-items: center; gap: 0.5rem; }
+        .section-title i { color: #006837; }
+        .chevron { color: #a9e5cb; transition: transform .2s ease; }
+        .profile-section.collapsed .chevron { transform: rotate(-90deg); }
+
+        .section-content {
+            overflow: hidden;
+            max-height: 1200px;
+            opacity: 1;
+            transition: max-height .3s ease, opacity .2s ease;
+            margin-top: 1rem;
+        }
+        .profile-section.collapsed .section-content {
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #888;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 5px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.2);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #006837;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #006837;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #008d4c;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .security-options {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255,255,255,0.1);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #006837;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <header class="main-header">
+            <div class="header-container">
+                <a href="casino-lobby.html" class="brand">
+                    <img src="../public/faria.png" alt="Faria Logo" class="ortiz-logo">
+                </a>
+            <div class="user-controls">
+                <a class="action-button deposit-btn" href="./depositar.html">
+                    <i class="fas fa-plus-circle"></i>
+                    DEPOSITAR
+                </a>
+                <div class="balance">
+                    <i class="fas fa-wallet"></i>
+                    <span class="amount">R$ 1.000,00</span>
+                </div>
+                <div class="user-menu">
+                    <button class="profile-toggle" onclick="toggleUserMenu()">
+                        <div class="user-avatar">
+                            <i class="fa fa-user-circle"></i>
+                        </div>
+                        <span class="user-name">Igor Sarmento</span>
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="meu-perfil.html" class="menu-item">
+                            <i class="fa fa-user"></i>
+                            Meu Perfil
+                        </a>
+                        <a href="#" class="menu-item">
+                            <i class="fa fa-history"></i>
+                            HistÃ³rico
+                        </a>
+                        <div class="divider"></div>
+                        <a href="#" class="menu-item">
+                            <i class="fa fa-sign-out"></i>
+                            Sair
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="profile-container">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="profile-info">
+                <h1 class="profile-name">Igor Sarmento</h1>
+                <p class="profile-email">Igor.Sarmento@igs-software.com.br</p>
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">R$ 1.000,00</div>
+                        <div class="stat-label">Saldo</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">32</div>
+                        <div class="stat-label">Apostas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">8</div>
+                        <div class="stat-label">VitÃ³rias</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-sections">
+            <!-- Dados Pessoais -->
+            <div class="profile-section collapsed">
+                <h2 class="section-title" role="button" tabindex="0">
+                    <i class="fas fa-user"></i>
+                    Dados Pessoais</span>
+                    <i class="fa fa-chevron-right chevron"></i>
+                </h2>
+                <div class="section-content">
+                <form>
+                    <div class="form-group">
+                        <label class="form-label">Nome Completo</label>
+                        <input type="text" class="form-control" value="Igor Sarmento">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">E-mail</label>
+                        <input type="email" class="form-control" value="Igor.Sarmento@igs-software.com.br">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Telefone</label>
+                        <input type="tel" class="form-control" value="(11) 98765-4321">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Data de Nascimento</label>
+                        <input type="date" class="form-control" value="1990-05-15">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Salvar AlteraÃ§Ãµes</button>
+                </form>
+                </div>
+            </div>
+
+            <!-- SeguranÃ§a -->
+            <div class="profile-section collapsed">
+                <h2 class="section-title">
+                    <i class="fas fa-shield-alt"></i>
+                    SeguranÃ§a
+                </h2>
+                <div class="form-group">
+                    <label class="form-label">Senha Atual</label>
+                    <input type="password" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nova Senha</label>
+                    <input type="password" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirmar Nova Senha</label>
+                    <input type="password" class="form-control">
+                </div>
+                <div class="security-options">
+                    <div class="toggle-switch">
+                        <span>AutenticaÃ§Ã£o em 2 Fatores</span>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-switch">
+                        <span>NotificaÃ§Ãµes de Login</span>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Atualizar SeguranÃ§a</button>
+            </div>
+
+            <!-- PreferÃªncias -->
+            <div class="profile-section collapsed">
+                <h2 class="section-title">
+                    <i class="fas fa-cog"></i>
+                    PreferÃªncias
+                </h2>
+                <div class="security-options">
+                    <div class="toggle-switch">
+                        <span>E-mails Promocionais</span>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-switch">
+                        <span>NotificaÃ§Ãµes Push</span>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-switch">
+                        <span>Newsletter</span>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Limites de Apostas -->
+            <div class="profile-section collapsed">
+                <h2 class="section-title">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    Limites de Apostas
+                </h2>
+                <div class="form-group">
+                    <label class="form-label">Limite DiÃ¡rio</label>
+                    <input type="number" class="form-control" value="1000">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Limite Semanal</label>
+                    <input type="number" class="form-control" value="5000">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Limite Mensal</label>
+                    <input type="number" class="form-control" value="15000">
+                </div>
+                <button type="submit" class="btn btn-primary">Atualizar Limites</button>
+            </div>
+        </div>
+
+        <!-- Zona de Perigo -->
+        <div class="profile-section" style="margin-top: 2rem; background: rgba(220,53,69,0.1);">
+            <h2 class="section-title" style="color: #dc3545;">
+                <i class="fas fa-exclamation-triangle" style="color: #dc3545;"></i>
+                Zona de Perigo
+            </h2>
+            <p style="color: #888; margin-bottom: 1rem;">
+                Estas aÃ§Ãµes sÃ£o permanentes e nÃ£o podem ser desfeitas.
+            </p>
+            <div class="form-group">
+                <button class="btn btn-danger">Desativar Conta</button>
+            </div>
+        </div>
+    </main>
+    </div><!-- Fim do wrapper -->
+
+    <!-- Core JS Files -->
+    <script src="../assets/js/core/jquery.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+
+    <script>
+        function toggleUserMenu() {
+            const dropdown = document.querySelector('.dropdown-menu');
+            dropdown.classList.toggle('active');
+        }
+
+        // Fecha o menu quando clicar fora
+        document.addEventListener('click', function(e) {
+            const userMenu = document.querySelector('.user-menu');
+            const dropdown = document.querySelector('.dropdown-menu');
+            if (!userMenu.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        // Previne que o menu feche quando clicar dentro dele
+        document.querySelector('.dropdown-menu').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // Accordion behavior for profile sections
+        (function(){
+            const sections = Array.from(document.querySelectorAll('.profile-section'));
+            const titles = Array.from(document.querySelectorAll('.profile-section .section-title'));
+            titles.forEach(title => {
+                title.addEventListener('click', () => {
+                    const section = title.closest('.profile-section');
+                    sections.forEach(s => { if (s !== section) s.classList.add('collapsed'); });
+                    section.classList.toggle('collapsed');
+                });
+                title.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); title.click(); }
+                });
+            });
+            // Ensure only first is expanded by default
+            sections.forEach((s, i) => { if (i > 0) s.classList.add('collapsed'); });
+        })();
+    </script>
+</body>
+
+</html>

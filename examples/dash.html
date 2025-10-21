@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>Metrix - Jogadores Online</title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+  <!-- Improved readable font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="../assets/css/paper-dashboard.css?v=2.1.1" rel="stylesheet" />
+  <link href="../assets/demo/demo.css" rel="stylesheet" />
+  <style>
+    /* Typography improvements for legibility */
+    body { font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; font-size:15px; line-height:1.5; color:#263238; }
+    h1,h2,h3,h4,h5 { font-weight:600; color:#1b2b34; }
+    .card .card-title { font-weight:600; font-size:1.05rem; }
+    .table thead th { font-weight:600; font-size:0.95rem; }
+    .table td, .table th { font-size:0.95rem; }
+    .list-group-item { font-size:0.95rem; }
+    small { font-size:0.85rem; }
+    .navbar .navbar-brand { font-weight:600; }
+  </style>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="sidebar" data-color="default" data-active-color="danger">
+      <div class="logo">
+        <a href="#" class="simple-text logo-mini">
+          <div class="logo-image-small">
+            <img src="../assets/img/logo-small.png">
+          </div>
+        </a>
+        <a href="#" class="simple-text logo-normal">Metrix</a>
+      </div>
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+          <li>
+            <a href="../examples/dash.html">
+              <i class="nc-icon nc-bank"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li>
+            <a href="../examples/progressive.html">
+              <i class="nc-icon nc-settings-gear-65"></i>
+              <p>Progressivo</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="main-panel">
+      <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <a class="navbar-brand">Jogadores Online</a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="content">
+        <!-- Widgets row: 6 widgets -->
+        <div class="row mb-3">
+          <div class="col-12">
+            <div class="d-flex flex-wrap justify-content-start" style="gap:12px;">
+              <div class="card widget-card p-2" data-target="#panel-players" style="cursor:pointer; min-width:140px;">
+                <div class="card-body text-center py-2">
+                  <i class="nc-icon nc-single-02 fa-2x"></i>
+                  <div class="mt-2">Players</div>
+                </div>
+              </div>
+              <div class="card widget-card p-2" data-target="#panel-games" style="cursor:pointer; min-width:140px;">
+                <div class="card-body text-center py-2">
+                  <i class="nc-icon nc-chart-bar-32 fa-2x"></i>
+                  <div class="mt-2">Top Games</div>
+                </div>
+              </div>
+              <div class="card widget-card p-2" data-target="#panel-jackpots" style="cursor:pointer; min-width:140px;">
+                <div class="card-body text-center py-2">
+                  <i class="nc-icon nc-trophy fa-2x"></i>
+                  <div class="mt-2">Jackpots</div>
+                </div>
+              </div>
+              <div class="card widget-card p-2" data-target="#panel-map" style="cursor:pointer; min-width:140px;">
+                <div class="card-body text-center py-2">
+                  <i class="nc-icon nc-globe fa-2x"></i>
+                  <div class="mt-2">Mapa</div>
+                </div>
+              </div>
+              <div class="card widget-card p-2" data-target="#panel-terminals" style="cursor:pointer; min-width:140px;">
+                <div class="card-body text-center py-2">
+                  <i class="nc-icon nc-layout-11 fa-2x"></i>
+                  <div class="mt-2">Terminais</div>
+                </div>
+              </div>
+              <div class="card widget-card p-2" data-target="#panel-pools" style="cursor:pointer; min-width:140px;">
+                <div class="card-body text-center py-2">
+                  <i class="nc-icon nc-money-coins fa-2x"></i>
+                  <div class="mt-2">Bolsas</div>
+                </div>
+              </div>
+              <div class="card widget-card p-2" data-target="#panel-reports" style="cursor:pointer; min-width:140px;">
+                <div class="card-body text-center py-2">
+                  <i class="nc-icon nc-notes fa-2x"></i>
+                  <div class="mt-2">Relatórios</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panels area: each panel is a collapse that shows a grid of information -->
+        <div class="row">
+          <div class="col-12">
+            <div id="panels-container">
+
+              <div id="panel-players" class="panel-collapse collapse show">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">Jogadores Online</h5>
+                    <p class="card-category">Pesquisar por nome ou PIN</p>
+                  </div>
+                  <div class="card-body">
+                    <div class="row mb-3">
+                      <div class="col-md-8">
+                        <div class="input-group">
+                          <input id="player-search" type="text" class="form-control" placeholder="Nome ou PIN">
+                          <div class="input-group-append">
+                            <button id="btn-search" class="btn btn-primary">Pesquisar</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4 text-right">
+                        <small class="text-muted">View all members</small>
+                      </div>
+                    </div>
+
+                    <div class="mb-3">
+                      <canvas id="members-line" height="80"></canvas>
+                    </div>
+
+                    <div class="table-responsive">
+                      <table id="players-table" class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>PIN</th>
+                            <th>Nome</th>
+                            <th>Jogo</th>
+                            <th>Tempo (min)</th>
+                            <th>Valor em jogo</th>
+                            <th>País</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- Populado por JS (mock) -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="panel-games" class="panel-collapse collapse">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">Jogos mais jogados (24h)</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <canvas id="games-pie" width="300" height="300"></canvas>
+                      </div>
+                      <div class="col-md-6">
+                        <p class="text-muted">Top games breakdown for the last 24 hours.</p>
+                        <!-- could add legend/details here -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="panel-jackpots" class="panel-collapse collapse">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">Últimos Jackpots</h5>
+                    <p class="card-category">Lista dos últimos jackpots</p>
+                  </div>
+                  <div class="card-body">
+                    <ul id="jackpot-list" class="list-group">
+                      <!-- Populado por JS -->
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div id="panel-map" class="panel-collapse collapse">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">Mapa de Origem dos Jogadores</h5>
+                  </div>
+                  <div class="card-body">
+                    <div id="world-map" style="height:400px;">
+                      <img src="../assets/img/placeholder-world-map.png" alt="Map placeholder" style="width:100%;height:100%;object-fit:cover;opacity:0.6">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="panel-terminals" class="panel-collapse collapse">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">Terminais</h5>
+                  </div>
+                  <div class="card-body">
+                    <p class="small text-monospace" style="white-space:pre-wrap;">7543658474 - 7541488240 - 7525720432 - 7562181386 - 7501154364 - 7516362358 - 7537838646 - 7585475803 - 7577228758 - 7567843673 - 7536083326 - 7547470307 - 7565357062 - 7567076572 - 7585582267 - 7575214572 - 7558870445 - 7581777557 - 7502805311 - 7532785532 - 7543205212 - 7514175567 - 7518851263 - 7562228761 - 7535085258 - 7540046470 - 7550157222 - 7551745254 - 7573031861 - 7517704441 - 7564106031 - 7585323531 - 7561172781 - 7571040504 - 7573176081 - 7537707554 - 7576106560 - 7501803355 - 7574535852 - 7500034437 - 7515064460 - 7526855845 - 7586635851 - 7572207502 - 7522534702 - 7585437156 - 7551073814 - 7504264707 - 7515781183 - 7570810104 - 7573334303 - 7574245110 - 7507162442 - 7563513066 - 7558284372 - 7501136502 - 7510275764 - 7528524360 - 7552545210</p>
+                  </div>
+                </div>
+              </div>
+
+              <div id="panel-pools" class="panel-collapse collapse">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">Bolsas por Produto</h5>
+                    <p class="card-category">Liste de produtos e suas bolsas (valores acumulados, reservas, iniciais)</p>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table id="pools-table" class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Produto</th>
+                            <th>Bolsa</th>
+                            <th>Acumulado</th>
+                            <th>Reserva</th>
+                            <th>Inicial</th>
+                            <th>Ações</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- Populado por JS -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="panel-reports" class="panel-collapse collapse">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">Relatórios / Softwares</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Software</th>
+                            <th>Nome do pacote Debian</th>
+                            <th>Número da Versão</th>
+                            <th>Descrição</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>IGX Base files</td>
+                            <td>igx-base</td>
+                            <td>1.7.14</td>
+                            <td>IGX OS Scripts Installer</td>
+                          </tr>
+                          <tr>
+                            <td>Multigames Client</td>
+                            <td>multigames.client.app</td>
+                            <td>2.3.2</td>
+                            <td>Displays lobby and games, and manages system operations</td>
+                          </tr>
+                          <tr>
+                            <td>OMS Lite</td>
+                            <td>omslite</td>
+                            <td>1.0.3</td>
+                            <td>Lite version of the Ortiz Media Screen,</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer footer-black footer-white">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="credits ml-auto">
+              <span class="copyright">© <script>document.write(new Date().getFullYear())</script>, Metrix</span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="../assets/js/core/jquery.min.js"></script>
+  <script src="../assets/js/core/popper.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script src="../assets/js/plugins/chartjs.min.js"></script>
+  <script src="../assets/js/paper-dashboard.min.js?v=2.1.1"></script>
+
+  <style>
+    .widget-card { width: 140px; border-radius:8px; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+    .widget-card .card-body { padding:8px 12px; }
+    .widget-card:hover { transform:translateY(-4px); transition:all .12s ease; }
+    #panels-container .card { margin-bottom:12px; }
+  </style>
+
+  <script>
+    // Mock data for demo
+    const PLAYERS = [
+      { pin: '1001', name: 'Carlos M', game: 'Triple Bonus HD', minutes: 12, stake: 'R$ 45.20', country: 'BR' },
+      { pin: '1002', name: 'Ana P', game: 'Multibingo OL', minutes: 5, stake: 'R$ 12.00', country: 'AR' },
+      { pin: '1003', name: 'Luis F', game: 'Triple Bonus HD', minutes: 30, stake: 'R$ 120.50', country: 'MX' },
+      { pin: '1004', name: 'Maria S', game: 'Multibingo OL', minutes: 3, stake: 'R$ 5.00', country: 'BR' }
+    ];
+
+    const JACKPOTS = [
+      { game: 'Triple Bonus HD', date: '20/10/2025', value: 'R$ 262.78' },
+      { game: 'Triple Bonus HD', date: '16/10/2025', value: 'R$ 215.05' },
+      { game: 'Multibingo OL', date: '07/10/2025', value: 'R$ 1,868.63' },
+      { game: 'Triple Bonus HD', date: '05/10/2025', value: 'R$ 1,577.35' },
+      { game: 'Triple Bonus HD', date: '03/10/2025', value: 'R$ 215.10' }
+    ];
+
+    const GAMES_24H = {
+      labels: ['Triple Bonus HD', 'Multibingo OL', 'Other'],
+      values: [65, 25, 10]
+    };
+
+    function renderPlayers(filter) {
+      const tbody = document.querySelector('#players-table tbody');
+      tbody.innerHTML = '';
+      const filterLower = (filter||'').toLowerCase();
+      PLAYERS.filter(p => !filterLower || p.name.toLowerCase().includes(filterLower) || p.pin.includes(filterLower))
+        .forEach(p => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${p.pin}</td><td>${p.name}</td><td>${p.game}</td><td>${p.minutes}</td><td>${p.stake}</td><td>${p.country}</td>`;
+          tbody.appendChild(tr);
+        });
+    }
+
+    function renderJackpots() {
+      const ul = document.getElementById('jackpot-list');
+      ul.innerHTML = '';
+      JACKPOTS.forEach(j => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+        li.innerHTML = `<div>${j.game}<br><small class="text-muted">${j.date}</small></div><span class="badge badge-primary">${j.value}</span>`;
+        ul.appendChild(li);
+      });
+    }
+
+    function renderPie() {
+      const ctx = document.getElementById('games-pie').getContext('2d');
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: GAMES_24H.labels,
+          datasets: [{ data: GAMES_24H.values, backgroundColor: ['#f96332', '#11cdef', '#2b3553'] }]
+        },
+        options: { responsive: true }
+      });
+    }
+
+    function renderMembersLine() {
+      const ctx = document.getElementById('members-line').getContext('2d');
+      // Mock: last 12 hours
+      const labels = [];
+      const values = [];
+      for (let i = 11; i >= 0; i--) {
+        const d = new Date(Date.now() - i * 60 * 60 * 1000);
+        labels.push(d.getHours() + ':00');
+        // simulate number of members
+        values.push(Math.floor(50 + Math.random() * 150));
+      }
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Membros Online',
+            data: values,
+            borderColor: '#1f8ef1',
+            backgroundColor: 'rgba(31,142,241,0.15)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    // --- Pools (Bolsas) mock and handlers ---
+    const PRODUCTS = [
+      { id: 'p1', name: 'Pix Real Online', pools: [
+        { id: 'p1-1', name: 'Bolsa A', accumulated: 12345.67, reserve: 1000, initial: 5000 },
+        { id: 'p1-2', name: 'Bolsa B', accumulated: 987.50, reserve: 200, initial: 500 }
+      ]},
+      { id: 'p2', name: 'Slots Central', pools: [
+        { id: 'p2-1', name: 'Bolsa X', accumulated: 4500.00, reserve: 500, initial: 2500 }
+      ]}
+    ];
+
+    function addAudit(user, action, details) {
+      // Very small local audit: push to console and show toast
+      console.log('[AUDIT]', user, action, details);
+      try { if (typeof Swal !== 'undefined') Swal.fire({ position: 'top-end', icon:'success', title:'Audit logged', showConfirmButton:false, timer:1000 }); } catch(e){}
+    }
+
+    function renderPools() {
+      const tbody = document.querySelector('#pools-table tbody');
+      tbody.innerHTML = '';
+      PRODUCTS.forEach(prod => {
+        prod.pools.forEach(pool => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${prod.name}</td><td>${pool.name}</td><td>R$ ${pool.accumulated.toFixed(2)}</td><td>R$ ${pool.reserve.toFixed(2)}</td><td>R$ ${pool.initial.toFixed(2)}</td><td><button class="btn btn-sm btn-outline-primary btn-edit-pool" data-pid="${prod.id}" data-poolid="${pool.id}">Editar</button></td>`;
+          tbody.appendChild(tr);
+        });
+      });
+
+      // wire edit buttons
+      document.querySelectorAll('.btn-edit-pool').forEach(btn => {
+        btn.addEventListener('click', function(){
+          const pid = this.getAttribute('data-pid');
+          const poolid = this.getAttribute('data-poolid');
+          const prod = PRODUCTS.find(p=>p.id===pid);
+          const pool = prod.pools.find(p=>p.id===poolid);
+          document.getElementById('edit-pool-product').textContent = prod.name;
+          document.getElementById('edit-pool-name').textContent = pool.name;
+          document.getElementById('edit-pool-acc').value = pool.accumulated.toFixed(2);
+          document.getElementById('edit-pool-pid').value = pid;
+          document.getElementById('edit-pool-id').value = poolid;
+          $('#modal-edit-pool').modal('show');
+        });
+      });
+    }
+
+    // Save pool changes
+    function savePoolChanges() {
+      const pid = document.getElementById('edit-pool-pid').value;
+      const poolid = document.getElementById('edit-pool-id').value;
+      const newAcc = parseFloat(document.getElementById('edit-pool-acc').value || 0);
+      const prod = PRODUCTS.find(p=>p.id===pid);
+      const pool = prod.pools.find(p=>p.id===poolid);
+      const old = pool.accumulated;
+      pool.accumulated = newAcc;
+      renderPools();
+      $('#modal-edit-pool').modal('hide');
+      addAudit('admin.user', 'POOL_ACC_UPDATED', `Product:${prod.name} Pool:${pool.name} from ${old} to ${newAcc}`);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Default render for the visible panel
+      renderPlayers();
+      renderMembersLine();
+
+      document.getElementById('btn-search').addEventListener('click', function(){
+        const q = document.getElementById('player-search').value || '';
+        renderPlayers(q);
+      });
+
+      // Widget click behavior: accordion-like
+      document.querySelectorAll('.widget-card').forEach(w => {
+        w.addEventListener('click', function(){
+          const target = document.querySelector(this.getAttribute('data-target'));
+          // collapse others
+          document.querySelectorAll('#panels-container .panel-collapse').forEach(p => {
+            if (p !== target) $(p).collapse('hide');
+          });
+          // toggle target
+          $(target).collapse('toggle');
+        });
+      });
+
+      // When a panel is shown, call the appropriate render functions
+      $('#panel-players').on('shown.bs.collapse', function () { renderPlayers(); renderMembersLine(); });
+      $('#panel-games').on('shown.bs.collapse', function () { renderPie(); });
+      $('#panel-jackpots').on('shown.bs.collapse', function () { renderJackpots(); });
+      $('#panel-map').on('shown.bs.collapse', function () { /* init map if using plugin */ });
+      $('#panel-terminals').on('shown.bs.collapse', function () { /* maybe lazy render */ });
+      $('#panel-reports').on('shown.bs.collapse', function () { /* render reports table if needed */ });
+  $('#panel-pools').on('shown.bs.collapse', function () { renderPools(); });
+      // modal save handler
+      document.getElementById('btn-save-pool').addEventListener('click', function(){ savePoolChanges(); });
+    });
+  </script>
+
+</body>
+
+</html>
+
+<!-- Modal: Edit Pool Accumulated Value -->
+<div class="modal fade" id="modal-edit-pool" tabindex="-1" role="dialog" aria-labelledby="modalEditPoolLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEditPoolLabel">Editar Valor da Bolsa</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Produto: <strong id="edit-pool-product"></strong></p>
+        <p>Bolsa: <strong id="edit-pool-name"></strong></p>
+        <div class="form-group">
+          <label for="edit-pool-acc">Valor Acumulado (R$)</label>
+          <input id="edit-pool-acc" class="form-control" type="number" step="0.01">
+        </div>
+        <input type="hidden" id="edit-pool-pid">
+        <input type="hidden" id="edit-pool-id">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="btn-save-pool">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>

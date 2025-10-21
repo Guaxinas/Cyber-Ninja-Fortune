@@ -1,0 +1,1366 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Ortiz Gaming - Cassino</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+    
+    <!-- Fonts and icons -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    
+    <!-- CSS Files -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/paper-dashboard.css" rel="stylesheet" />
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #001207, #002c1c, #001a10);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Sports Betting Section */
+        .sports-section {
+            padding: 2rem;
+            background: linear-gradient(135deg, #001207, #002c1c, #001a10);
+        }
+
+        .carousel-container {
+            width: 100%;
+        }
+
+        .carousel .carousel-slide img.carousel-banner {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .sports-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .sports-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .sports-btn {
+            background: rgba(0,104,55,0.8);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .sports-btn:hover {
+            background: #008d4c;
+            transform: translateY(-2px);
+        }
+
+        /* Live Events Section */
+        .live-events-section {
+            padding: 2rem;
+            background: #001207;
+        }
+
+        .live-events-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .live-events-header {
+            margin-bottom: 2rem;
+        }
+
+        .live-tabs {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .live-tab {
+            background: none;
+            border: none;
+            color: #888;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        .live-tab.active {
+            color: white;
+            border-bottom: 2px solid #006837;
+        }
+
+        .live-icon {
+            color: #ff3636;
+            animation: pulse 1.5s infinite;
+        }
+
+        .live-events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .live-event-card {
+            background: rgba(0,44,28,0.8);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .live-badge {
+            background: #ff3636;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .next-badge {
+            background: #006837;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .event-time {
+            color: #888;
+        }
+
+        .event-teams {
+            margin-bottom: 1rem;
+        }
+
+        .team {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            margin-bottom: 0.75rem;
+            padding: 0.55rem 0.75rem;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(0,104,55,0.18), rgba(0,44,28,0.6));
+            border: 1px solid rgba(0,200,131,0.16);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 10px 20px rgba(0,0,0,0.25);
+            backdrop-filter: blur(6px);
+        }
+
+        .team-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.8rem;
+            letter-spacing: 0.04em;
+            color: #fff;
+            text-transform: uppercase;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-logo::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0));
+            mix-blend-mode: screen;
+            opacity: 0.65;
+        }
+
+        .team-logo span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .team-logo-corinthians { background: radial-gradient(circle at top, #ffffff 0%, #1f1f1f 55%, #0b0b0b 100%); }
+        .team-logo-palmeiras { background: radial-gradient(circle at top, #6bffb2 0%, #008037 55%, #005224 100%); }
+        .team-logo-barcelona { background: linear-gradient(135deg, #a50044 0%, #004d98 50%, #fcd116 100%); }
+        .team-logo-real { background: linear-gradient(160deg, #ffffff 0%, #ffd700 60%, #00529f 100%); color: #021c46; }
+        .team-logo-liverpool { background: linear-gradient(135deg, #c8102e 0%, #790019 100%); }
+        .team-logo-city { background: linear-gradient(135deg, #6cb2ff 0%, #004d9b 100%); }
+
+        .team-name {
+            flex: 1;
+            margin: 0 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .team-score {
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        .event-odds {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .odd-btn {
+            flex: 1;
+            background: rgba(0,104,55,0.8);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .odd-btn:hover {
+            background: #008d4c;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+            min-height: 100vh;
+        }
+
+        .wrapper {
+            padding-top: 70px;
+            background: radial-gradient(circle at center, rgba(0,44,28,0.2) 0%, rgba(0,12,7,0.4) 100%);
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: linear-gradient(to right, #002c1c, #004d33);
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,44,28,0.3);
+        }
+
+        .header-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 30px;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .ortiz-logo {
+            height: 50px;
+            width: auto;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        .brand:hover .ortiz-logo {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        .user-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .action-button {
+            background: #006837;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,104,55,0.4);
+            background: #008d4c;
+        }
+
+        .balance {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .balance i {
+            color: #00c853;
+        }
+
+        .amount {
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .profile-toggle {
+            background: none;
+            border: none;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .user-avatar i {
+            font-size: 24px;
+            color: #00c853;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 10px;
+            background: #004d40;
+            border-radius: 8px;
+            padding: 8px 0;
+            box-shadow: 0 4px 20px rgba(0,77,64,0.2);
+            display: none;
+            min-width: 200px;
+        }
+
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background: rgba(0,200,83,0.1);
+            color: #00e676;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 8px 0;
+        }
+
+        /* Category Navigation */
+        .category-nav {
+            background: #002c1c;
+            padding: 15px 0;
+            position: sticky;
+            top: 70px;
+            z-index: 900;
+            box-shadow: 0 2px 15px rgba(0,44,28,0.1);
+            margin-top: 20px;
+        }
+
+        .category-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .category-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-btn {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            color: white;
+            background: rgba(0,200,83,0.2);
+        }
+
+        .category-btn.active {
+            color: #00e676;
+            background: rgba(0,200,83,0.3);
+        }
+
+        /* Game Grid */
+        .game-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-divider {
+            margin: 3rem auto 2rem;
+            height: 2px;
+            max-width: 1200px;
+            background: linear-gradient(90deg, rgba(0,200,131,0), rgba(0,200,131,0.45), rgba(0,200,131,0));
+            border-radius: 999px;
+        }
+
+        .site-footer {
+            background: rgba(0,15,9,0.95);
+            border-top: 1px solid rgba(0,200,131,0.2);
+            margin-top: 60px;
+            padding: 40px 0 28px;
+            color: rgba(255,255,255,0.75);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .footer-container p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .footer-warning {
+            color: #ffb347;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-top: 6px;
+        }
+
+        .footer-links a {
+            color: #6dffe0;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ffffff;
+        }
+
+        .footer-dot {
+            color: rgba(255,255,255,0.4);
+        }
+
+        .footer-badges {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 6px;
+        }
+
+        .footer-badges img {
+            height: 52px;
+            width: auto;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.35));
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 34px;
+            margin-top: 34px;
+        }
+
+        .game-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0;
+            padding: 26px 26px 30px;
+            border-radius: 32px;
+            overflow: hidden;
+            background: linear-gradient(165deg, rgba(0, 62, 40, 0.82) 0%, rgba(0, 18, 10, 0.96) 60%, rgba(0, 38, 24, 0.88) 100%);
+            border: 1px solid rgba(109, 255, 224, 0.18);
+            box-shadow: 0 28px 65px -30px rgba(0, 0, 0, 0.9);
+            transform: perspective(1100px) translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg);
+            transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s, border-color 0.5s;
+            isolation: isolate;
+        }
+
+        .game-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% -10%, rgba(124, 217, 255, 0.28), transparent 60%), radial-gradient(circle at 80% 120%, rgba(0, 255, 171, 0.22), transparent 55%);
+            opacity: 0;
+            transition: opacity 0.6s;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .game-card::after {
+            content: "";
+            position: absolute;
+            inset: 16px;
+            border-radius: 28px;
+            border: 1px solid rgba(109, 255, 224, 0.15);
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .game-card:hover {
+            transform: perspective(1100px) translateY(-18px) rotateX(6deg) rotateY(-3deg) scale(1.02);
+            box-shadow: 0 36px 85px -26px rgba(0, 0, 0, 0.96);
+            border-color: rgba(109, 255, 224, 0.35);
+        }
+
+        .game-card:hover::before {
+            opacity: 1;
+        }
+
+        .game-card:hover::after {
+            opacity: 1;
+        }
+
+        .game-image {
+            position: relative;
+            width: 100%;
+            border-radius: 26px;
+            overflow: hidden;
+            aspect-ratio: 5 / 6;
+            box-shadow: 0 30px 70px -32px rgba(0, 0, 0, 0.9);
+            transform-style: preserve-3d;
+        }
+
+        .game-image::before {
+            content: "";
+            position: absolute;
+            inset: -50%;
+            background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0) 45%), radial-gradient(circle at 80% 80%, rgba(0, 255, 171, 0.28) 0%, rgba(0, 255, 171, 0) 55%);
+            opacity: 0;
+            transform: translate3d(-30%, -30%, 0) rotate(22deg);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            pointer-events: none;
+        }
+
+        .game-image::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.55) 100%);
+            opacity: 0;
+            transition: opacity 0.45s;
+        }
+
+        .game-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: translate3d(0, 0, 0) scale(1);
+            transition: transform 0.6s ease, filter 0.6s ease, box-shadow 0.6s ease;
+        }
+
+        .game-card:hover .game-image img {
+            transform: translate3d(0, -8px, 45px) scale(1.08) rotateX(4deg);
+            filter: saturate(1.12);
+            box-shadow: 0 35px 70px -26px rgba(0, 0, 0, 0.85);
+        }
+
+        .game-card:hover .game-image::after {
+            opacity: 1;
+        }
+
+        .game-card:hover .game-image::before {
+            opacity: 1;
+            transform: translate3d(0, 0, 45px) rotate(10deg);
+        }
+
+        @supports not (aspect-ratio: 5 / 6) {
+            .game-image {
+                padding-bottom: 120%;
+            }
+
+            .game-image img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                height: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .game-card {
+                padding: 18px 18px 24px;
+                border-radius: 24px;
+            }
+
+            .game-image {
+                border-radius: 18px;
+            }
+
+            .game-info {
+                margin-top: -42px;
+                padding: 16px 18px;
+            }
+
+            .game-badge,
+            .game-coins {
+                top: 26px;
+            }
+        }
+
+        /* Search Bar Styles */
+        .search-container {
+            position: relative;
+            margin-right: 20px;
+        }
+
+        .search-input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 8px 15px 8px 35px;
+            color: white;
+            width: 250px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .search-input:focus {
+            background: rgba(255,255,255,0.15);
+            border-color: #00c853;
+            outline: none;
+            width: 300px;
+            box-shadow: 0 0 0 2px rgba(0,200,83,0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Carousel Styles */
+        .carousel-container {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            background: linear-gradient(135deg, #001207, #002c1c, #001a10);
+        }
+
+        .carousel {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            min-height: 200px;
+        }
+
+        @media (min-width: 768px) {
+            .carousel {
+                min-height: 240px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .carousel {
+                min-height: 300px;
+            }
+        }
+
+        .carousel-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            object-position: center;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active {
+            background: #8A2BE2;
+            transform: scale(1.2);
+        }
+
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .carousel-arrow:hover {
+            background: rgba(138, 43, 226, 0.8);
+        }
+
+        .carousel-prev {
+            left: 20px;
+        }
+
+        .carousel-next {
+            right: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-container">
+                <div class="brand">
+                    <img src="../public/faria.png" alt="Faria" class="ortiz-logo">
+                </div>
+                
+                <div class="user-controls">
+                    <div class="search-container">
+                        <i class="fa fa-search search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Buscar jogos...">
+                    </div>
+
+                    <a class="action-button deposit-btn" href="./depositar.html">
+                        <i class="fa fa-plus-circle"></i>
+                        DEPOSITAR
+                    </a>
+                    
+                    <div class="balance">
+                        <i class="fa fa-wallet"></i>
+                        <span class="amount">R$ 1000,00</span>
+                    </div>
+                    
+                    <div class="user-menu">
+                        <button class="profile-toggle" onclick="toggleUserMenu()">
+                            <div class="user-avatar">
+                                <i class="fa fa-user-circle"></i>
+                            </div>
+                            <span class="user-name">Igor Sarmento</span>
+                            <i class="fa fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="#" class="menu-item">
+                                <i class="fa fa-user"></i>
+                                Meu Perfil
+                            </a>
+                            <a href="#" class="menu-item">
+                                <i class="fa fa-history"></i>
+                                Histórico
+                            </a>
+                            <div class="divider"></div>
+                            <a href="#" class="menu-item">
+                                <i class="fa fa-sign-out"></i>
+                                Sair
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Carousel Banner -->
+        <div class="carousel-container">
+            <div class="carousel">
+                <div class="carousel-slide active">
+                    <img class="carousel-banner" src="../public/aristocats.png" alt="Promoção Principal" loading="lazy">
+                </div>
+
+                <div class="carousel-nav">
+                    <div class="carousel-dot active"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Navigation -->
+        <nav class="category-nav">
+            <div class="category-container">
+                <button class="category-btn active">
+                    <i class="fa fa-star"></i>
+                    Populares
+                </button>
+                <button class="category-btn">
+                    <i class="fa fa-fire"></i>
+                    Novos
+                </button>
+                <button class="category-btn">
+                    <i class="fa fa-trophy"></i>
+                    Slots
+                </button>
+                <button class="category-btn">
+                    <i class="fa fa-bolt"></i>
+                    Crash
+                </button>
+                <button class="category-btn">
+                    <i class="fa fa-dot-circle-o"></i>
+                    Bingo
+                </button>
+                <button class="category-btn">
+                    <i class="fa fa-diamond"></i>
+                    Blackjack
+                </button>
+                <button class="category-btn">
+                    <i class="fa fa-circle-o-notch"></i>
+                    Roleta
+                </button>
+                <button class="category-btn">
+                    <i class="fa fa-clone"></i>
+                    Video Poker
+                </button>
+                <button class="category-btn">
+                    <i class="fa fa-gamepad"></i>
+                    Outros
+                </button>
+            </div>
+        </nav>
+
+        <!-- Game Grid -->
+        <main class="game-container">
+            <div class="game-grid">
+                <!-- Linha 1 - Jogos Ortiz -->
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="../public/magicdragon.png" alt="Magic Dragon" loading="lazy">
+                    </div>
+                    <div class="game-info">
+                        <h3 class="game-name">Magic Dragon</h3>
+                        <p class="game-provider">Ortiz Gaming</p>
+                        <div class="game-tags">
+                            <span class="game-tag">Ortiz</span>
+                            <span class="game-tag">Jackpot</span>
+                        </div>
+                    </div>
+                    <div class="game-badge">NOVO</div>
+                    <div class="game-coins">
+                        <i class="fa fa-coins"></i>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="../public/dulce.png" alt="Dulce Mania" loading="lazy">
+                    </div>
+                    <div class="game-info">
+                        <h3 class="game-name">Dulce Mania</h3>
+                        <p class="game-provider">Ortiz Gaming</p>
+                        <div class="game-tags">
+                            <span class="game-tag">Doces</span>
+                            <span class="game-tag">Slots</span>
+                        </div>
+                    </div>
+                    <div class="game-coins">
+                        <i class="fa fa-coins"></i>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="../public/bingole.png" alt="Bingole" loading="lazy">
+                    </div>
+                    <div class="game-info">
+                        <h3 class="game-name">Bingole</h3>
+                        <p class="game-provider">Ortiz Gaming</p>
+                        <div class="game-tags">
+                            <span class="game-tag">Bingo</span>
+                            <span class="game-tag">Clássico</span>
+                        </div>
+                    </div>
+                    <div class="game-coins">
+                        <i class="fa fa-coins"></i>
+                    </div>
+                </div>
+
+
+
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="../public/golmania.png" alt="Gol Mania" loading="lazy">
+                    </div>
+                    <div class="game-info">
+                        <h3 class="game-name">Gol Mania</h3>
+                        <p class="game-provider">Ortiz Gaming</p>
+                        <div class="game-tags">
+                            <span class="game-tag">Esportes</span>
+                            <span class="game-tag">Slots</span>
+                        </div>
+                    </div>
+                    <div class="game-coins">
+                        <i class="fa fa-coins"></i>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="../public/turbo.png" alt="Turbo" loading="lazy">
+                    </div>
+                    <div class="game-info">
+                        <h3 class="game-name">Turbo</h3>
+                        <p class="game-provider">Ortiz Gaming</p>
+                    </div>
+                    <div class="game-coins">
+                        <i class="fa fa-coins"></i>
+                    </div>
+                </div>
+
+                <!-- Linha 2 - Jogos Pragmatic -->
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="../public/roma.png" alt="Roma" loading="lazy">
+                    </div>
+                    <div class="game-info">
+                        <h3 class="game-name">Roma</h3>
+                        <p class="game-provider">Ortiz Gaming</p>
+                    </div>
+                    <div class="game-coins">
+                        <i class="fa fa-coins"></i>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="../public/acebonus.png" alt="Ace Bonus" loading="lazy">
+                    </div>
+                    <div class="game-info">
+                        <h3 class="game-name">Ace Bonus</h3>
+                        <p class="game-provider">Ortiz Gaming</p>
+                    </div>
+                    <div class="game-coins">
+                        <i class="fa fa-coins"></i>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="../public/triplebonus.png" alt="Triple Bonus" loading="lazy">
+                    </div>
+                    <div class="game-info">
+                        <h3 class="game-name">Triple Bonus</h3>
+                        <p class="game-provider">Ortiz Gaming</p>
+                    </div>
+                    <div class="game-coins">
+                        <i class="fa fa-coins"></i>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="../public/multibingo.png" alt="Multi Bingo" loading="lazy">
+                    </div>
+                    <div class="game-info">
+                        <h3 class="game-name">Multi Bingo</h3>
+                        <p class="game-provider">Ortiz Gaming</p>
+                    </div>
+                    <div class="game-coins">
+                        <i class="fa fa-coins"></i>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="../public/6bingo.png" alt="6 Bingo" loading="lazy">
+                    </div>
+                    <div class="game-info">
+                        <h3 class="game-name">6 Bingo</h3>
+                        <p class="game-provider">Ortiz Gaming</p>
+                    </div>
+                    <div class="game-coins">
+                        <i class="fa fa-coins"></i>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="../public/tiger.png" alt="Tiger" loading="lazy">
+                    </div>
+                    <div class="game-info">
+                        <h3 class="game-name">Tiger</h3>
+                        <p class="game-provider">Ortiz Gaming</p>
+                    </div>
+                    <div class="game-coins">
+                        <i class="fa fa-coins"></i>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="../public/raio.png" alt="Raio" loading="lazy">
+                    </div>
+                    <div class="game-info">
+                        <h3 class="game-name">Raio</h3>
+                        <p class="game-provider">Ortiz Gaming</p>
+                    </div>
+                    <div class="game-coins">
+                        <i class="fa fa-coins"></i>
+                    </div>
+                </div>
+
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="../public/sugar.png" alt="Sugar" loading="lazy">
+                    </div>
+                    <div class="game-info">
+                        <h3 class="game-name">Sugar</h3>
+                        <p class="game-provider">Ortiz Gaming</p>
+                    </div>
+                    <div class="game-coins">
+                        <i class="fa fa-coins"></i>
+                    </div>
+                </div>
+
+
+            </div>
+        </main>
+
+        <div class="section-divider"></div>
+
+        <!-- Sports Betting Section -->
+        <section class="sports-section">
+            <div class="sports-container">
+                <h2 class="section-title">Apostas Esportivas</h2>
+                <div class="sports-buttons">
+                    <button class="sports-btn">
+                        <i class="fa fa-futbol"></i>
+                        Brasileirão 2025
+                    </button>
+                    <button class="sports-btn">
+                        <i class="fa fa-trophy"></i>
+                        Libertadores da América
+                    </button>
+                    <button class="sports-btn">
+                        <i class="fa fa-globe-americas"></i>
+                        Copa Sul-Americana
+                    </button>
+                    <button class="sports-btn">
+                        <i class="fa fa-shield-alt"></i>
+                        Copa do Brasil
+                    </button>
+                    <button class="sports-btn">
+                        <i class="fa fa-crown"></i>
+                        Premier League
+                    </button>
+                    <button class="sports-btn">
+                        <i class="fa fa-futbol"></i>
+                        La Liga
+                    </button>
+                    <button class="sports-btn">
+                        <i class="fa fa-tennis-ball"></i>
+                        US Open
+                    </button>
+                    <button class="sports-btn">
+                        <i class="fa fa-star"></i>
+                        Champions League
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Events Section -->
+        <section class="live-events-section">
+            <div class="live-events-container">
+                <div class="live-events-header">
+                    <div class="live-tabs">
+                        <button class="live-tab active">
+                            <i class="fa fa-circle live-icon"></i>
+                            Eventos Ao Vivo
+                        </button>
+                        <button class="live-tab">
+                            <i class="fa fa-clock"></i>
+                            Próximos Eventos
+                        </button>
+                    </div>
+                </div>
+
+                <div class="live-events-grid">
+                    <!-- Live Event Card -->
+                    <div class="live-event-card">
+                        <div class="event-header">
+                            <span class="live-badge">AO VIVO</span>
+                            <span class="event-time">65'</span>
+                        </div>
+                        <div class="event-teams">
+                            <div class="team">
+                                <div class="team-logo team-logo-corinthians"><span>COR</span></div>
+                                <span class="team-name">Corinthians</span>
+                                <span class="team-score">8</span>
+                            </div>
+                            <div class="team">
+                                <div class="team-logo team-logo-palmeiras"><span>PAL</span></div>
+                                <span class="team-name">Palmeiras</span>
+                                <span class="team-score">1</span>
+                            </div>
+                        </div>
+                        <div class="event-odds">
+                            <button class="odd-btn">2.10</button>
+                            <button class="odd-btn">3.25</button>
+                            <button class="odd-btn">3.40</button>
+                        </div>
+                    </div>
+
+                    <!-- Live Event Card -->
+                    <div class="live-event-card">
+                        <div class="event-header">
+                            <span class="live-badge">AO VIVO</span>
+                            <span class="event-time">32'</span>
+                        </div>
+                        <div class="event-teams">
+                            <div class="team">
+                                <div class="team-logo team-logo-barcelona"><span>BAR</span></div>
+                                <span class="team-name">Barcelona</span>
+                                <span class="team-score">0</span>
+                            </div>
+                            <div class="team">
+                                <div class="team-logo team-logo-real"><span>RM</span></div>
+                                <span class="team-name">Real Madrid</span>
+                                <span class="team-score">0</span>
+                            </div>
+                        </div>
+                        <div class="event-odds">
+                            <button class="odd-btn">2.50</button>
+                            <button class="odd-btn">3.15</button>
+                            <button class="odd-btn">2.80</button>
+                        </div>
+                    </div>
+
+                    <!-- Next Event Card -->
+                    <div class="live-event-card">
+                        <div class="event-header">
+                            <span class="next-badge">PRÓXIMO</span>
+                            <span class="event-time">Hoje 20:00</span>
+                        </div>
+                        <div class="event-teams">
+                            <div class="team">
+                                <div class="team-logo team-logo-liverpool"><span>LIV</span></div>
+                                <span class="team-name">Liverpool</span>
+                                <span class="team-score">-</span>
+                            </div>
+                            <div class="team">
+                                <div class="team-logo team-logo-city"><span>MCI</span></div>
+                                <span class="team-name">Man. City</span>
+                                <span class="team-score">-</span>
+                            </div>
+                        </div>
+                        <div class="event-odds">
+                            <button class="odd-btn">2.25</button>
+                            <button class="odd-btn">3.30</button>
+                            <button class="odd-btn">3.10</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <div class="footer-container">
+                <p class="footer-warning">Proibido para menores de 18 anos</p>
+                <p>Apostar pode causar dependência. Jogue com responsabilidade. Jogar é proibido em alguns países, verifique a legislação do seu país. Saiba mais sobre como jogar de forma responsável ou busque ajuda em Gordon Moody (Gambling Therapy).</p>
+                <p>faria.pixreal.bet é operado pela Azung B.V., uma empresa incorporada sob as leis de Curaçao com o Número de Empresa 163067. A Azung é licenciada pela Curaçao Gaming Control Board desde 29/Jul/2024 para oferecer jogos de azar sob a licença número OGL/2024/835/0040.</p>
+                <p>Entre em nosso chat para esclarecer suas dúvidas.</p>
+                <p>Horário de atendimento: das 10h às 18h, em dias úteis.</p>
+                <div class="footer-links">
+                    <a href="#">Termos de uso</a>
+                    <span class="footer-dot">•</span>
+                    <a href="#">Política de privacidade</a>
+                </div>
+                <div class="footer-badges">
+                    <img src="../public/unnamed.png" alt="Selo DGCB - Curaçao Gaming Control Board">
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Core JS Files -->
+    <script src="../assets/js/core/jquery.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+    
+    <script>
+        // Toggle menu dropdown
+        function toggleUserMenu() {
+            const dropdown = document.querySelector('.dropdown-menu');
+            dropdown.classList.toggle('active');
+
+            // Close when clicking outside
+            document.addEventListener('click', function closeDropdown(e) {
+                const menu = document.querySelector('.user-menu');
+                if (!menu.contains(e.target)) {
+                    dropdown.classList.remove('active');
+                    document.removeEventListener('click', closeDropdown);
+                }
+            });
+        }
+
+        // Category navigation
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Here you would typically filter the games based on category
+                console.log('Selected category:', button.textContent.trim());
+            });
+        });
+
+        // Carousel setup - Static banner
+        const carousel = {
+            init() {
+                // Ensure banner is always visible
+                document.querySelector('.carousel-slide').classList.add('active');
+                document.querySelector('.carousel-dot').classList.add('active');
+            }
+        };
+
+        // Initialize carousel
+        carousel.init();
+
+        // Search functionality
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const gameCards = document.querySelectorAll('.game-card');
+
+            gameCards.forEach(card => {
+                const gameName = card.querySelector('.game-name').textContent.toLowerCase();
+                const gameProvider = card.querySelector('.game-provider').textContent.toLowerCase();
+                
+                if (gameName.includes(searchTerm) || gameProvider.includes(searchTerm)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+

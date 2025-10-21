@@ -1,0 +1,156 @@
+/* Neon Shinobi Slot - Cyberpunk Theme */
+:root {
+    --neon-pink: #ff00ff;
+    --neon-blue: #00ffff;
+    --neon-purple: #bf00ff;
+    --dark-bg: #0a0a0f;
+    --grid-bg: #1a1a2f;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    margin: 0;
+    overflow: hidden;
+    background-image: 
+        linear-gradient(45deg, rgba(255,0,255,0.1) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(0,255,255,0.1) 25%, transparent 25%);
+    background-size: 100px 100px;
+}
+
+.game-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+}
+
+#game-canvas {
+    background: var(--grid-bg);
+    border: 2px solid var(--neon-purple);
+    border-radius: 10px;
+    box-shadow: 
+        0 0 10px var(--neon-purple),
+        inset 0 0 20px rgba(191,0,255,0.5);
+}
+
+.controls {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(10,10,15,0.8);
+    border-radius: 10px;
+    border: 1px solid var(--neon-blue);
+    box-shadow: 0 0 15px rgba(0,255,255,0.3);
+}
+
+.btn-spin {
+    background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+    border: none;
+    color: white;
+    padding: 15px 40px;
+    font-size: 1.2em;
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px rgba(255,255,255,0.8);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-spin:before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255,255,255,0.1),
+        transparent
+    );
+    transform: rotate(45deg);
+    animation: shine 2s infinite;
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+
+.btn-spin:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 5px 20px rgba(255,0,255,0.4),
+        0 0 20px rgba(191,0,255,0.6);
+}
+
+.btn-spin:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 10px 20px;
+    background: rgba(0,0,0,0.5);
+    border-radius: 5px;
+    border: 1px solid var(--neon-blue);
+    min-width: 150px;
+}
+
+.stat-label {
+    color: var(--neon-blue);
+    font-size: 0.8em;
+    text-transform: uppercase;
+}
+
+.stat-value {
+    font-size: 1.5em;
+    color: white;
+    text-shadow: 0 0 10px var(--neon-pink);
+}
+
+/* Overdrive Mode Effects */
+.overdrive-active {
+    animation: overdriveBackground 1s infinite;
+}
+
+@keyframes overdriveBackground {
+    0% { background-position: 0 0; }
+    100% { background-position: 100px 100px; }
+}
+
+/* Win Messages */
+.game-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.9);
+    padding: 20px 40px;
+    border-radius: 10px;
+    border: 2px solid var(--neon-pink);
+    color: white;
+    font-size: 2em;
+    text-transform: uppercase;
+    animation: messageGlow 1s infinite alternate;
+    z-index: 1000;
+}
+
+@keyframes messageGlow {
+    from { box-shadow: 0 0 10px var(--neon-pink); }
+    to { box-shadow: 0 0 20px var(--neon-pink), 0 0 40px var(--neon-purple); }
+}

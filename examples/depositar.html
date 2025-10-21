@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>Ortiz Gaming - Depositar</title>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
+
+  <!-- Fonts and icons -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+  <!-- CSS Files -->
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="../assets/css/paper-dashboard.css" rel="stylesheet" />
+
+  <style>
+    body { background: #002c1c; font-family: 'Montserrat', sans-serif; }
+
+    .wrapper { padding-top: 90px; background: radial-gradient(circle at center, rgba(0,44,28,0.2) 0%, rgba(0,12,7,0.4) 100%); min-height: 100vh; }
+
+    /* Header */
+    .main-header { position: fixed; top: 0; left: 0; right: 0; height: 70px; background: linear-gradient(to right, #002c1c, #004d33); z-index: 1000; box-shadow: 0 2px 15px rgba(0,44,28,0.3); }
+    .header-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 100%; display: flex; align-items: center; justify-content: space-between; }
+    .brand { display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; }
+    .brand .ortiz-logo { height: 50px; width: auto; transition: transform .3s ease, filter .3s ease; }
+    .brand:hover .ortiz-logo { transform: scale(1.05); filter: brightness(1.1); }
+
+    /* Controls (match casino-lobby) */
+    .user-controls { display: flex; align-items: center; gap: 20px; }
+    /* Nome do usuário sem quebra */
+    .user-name { white-space: nowrap; }
+    .action-button { background: #006837; border: none; padding: 10px 20px; border-radius: 6px; color: #fff; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: all .3s ease; cursor: pointer; text-decoration: none; }
+    .action-button:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,104,55,0.4); background: #008d4c; }
+    .action-button.outline { background: transparent; border: 1px solid rgba(255,255,255,0.25); color: #e7f7ef; }
+    .deposit-btn { background: linear-gradient(90deg, #1fbf75, #14a463); color: #0b1f16; font-weight: 800; letter-spacing: .02em; }
+    /* Balance (match casino-lobby) */
+    .balance { display: flex; align-items: center; gap: 10px; padding: 10px 20px; border-radius: 6px; background: rgba(255,255,255,0.05); }
+    .balance i { color: #00c853; }
+    .amount { color: #fff; font-weight: 600; font-size: 16px; }
+    .user-menu { position: relative; }
+    .profile-toggle { background: none; border: none; padding: 8px 15px; display: flex; align-items: center; gap: 10px; cursor: pointer; color: white; }
+    .user-avatar i { font-size: 24px; color: #00c853; }
+    .dropdown-menu { position: absolute; top: 100%; right: 0; margin-top: 10px; background: #004d40; border-radius: 8px; padding: 8px 0; box-shadow: 0 4px 20px rgba(0,77,64,0.2); display: none; min-width: 200px; z-index: 50; }
+    .dropdown-menu.active { display: block; }
+    .menu-item { display: flex; align-items: center; gap: 10px; padding: 12px 20px; color: white; text-decoration: none; transition: all 0.3s ease; }
+    .menu-item:hover { background: rgba(0,200,83,0.1); color: #00e676; }
+    .divider { height: 1px; background: rgba(255,255,255,0.1); margin: 8px 0; }
+
+    /* Page title */
+    .page-title { max-width: 1200px; margin: 0 auto 16px; padding: 0 24px; color: #fff; display: flex; align-items: center; gap: 10px; opacity: .9; }
+
+    /* Deposit card */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px 32px; }
+    .deposit-card { background: rgba(0,44,28,0.85); border-radius: 14px; padding: 24px; color: #e7f7ef; box-shadow: 0 10px 30px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.05); }
+    .deposit-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    @media (min-width: 960px) { .deposit-grid { grid-template-columns: 1.2fr .8fr; } }
+
+    .section-title { color: #fff; margin: 0 0 12px; font-size: 18px; }
+    .form-row { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    @media (min-width: 640px) { .form-row.two { grid-template-columns: 1fr 1fr; } }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .label { color: #a8e0c8; font-size: 12px; letter-spacing: .02em; text-transform: uppercase; }
+    .input { background: rgba(0,0,0,0.35); border: 1px solid rgba(168,224,200,0.25); color: #fff; padding: 12px 14px; border-radius: 10px; outline: none; transition: border .2s ease, box-shadow .2s ease; }
+    .input:focus { border-color: #1fbf75; box-shadow: 0 0 0 3px rgba(31,191,117,0.2); }
+
+    .amount-prefix { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #bfe9d3; font-weight: 600; }
+    .amount-wrap { position: relative; }
+    .amount-wrap .input { padding-left: 38px; font-size: 18px; font-weight: 700; letter-spacing: .02em; }
+
+    .quick-amounts { display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip { background: rgba(0,104,55,0.25); color: #d9ffee; border: 1px solid rgba(168,224,200,0.25); padding: 8px 12px; border-radius: 999px; cursor: pointer; transition: background .2s ease, transform .15s ease; font-weight: 600; }
+    .chip:hover { background: rgba(0,141,76,0.35); transform: translateY(-1px); }
+
+    .methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .method { background: rgba(0,0,0,0.35); border: 1px solid rgba(168,224,200,0.25); color: #d9ffee; padding: 12px; border-radius: 10px; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: border .2s ease, transform .15s ease; justify-content: center; }
+    .method.active { border-color: #1fbf75; box-shadow: inset 0 0 0 2px rgba(31,191,117,0.35); }
+    .method i { font-size: 18px; color: #9fe7c6; }
+
+    .helper { color: #a4cdb9; font-size: 12px; }
+    .submit { margin-top: 6px; background: linear-gradient(90deg, #1fbf75, #14a463); color: #0b1f16; border: none; padding: 14px 18px; width: 100%; border-radius: 12px; font-weight: 800; letter-spacing: .02em; cursor: pointer; transition: transform .15s ease, box-shadow .2s ease; }
+    .submit:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(31,191,117,0.25); }
+
+    /* Right column: summary */
+    .summary { background: rgba(0,0,0,0.35); border: 1px solid rgba(168,224,200,0.25); padding: 16px; border-radius: 12px; height: fit-content; }
+    .summary-row { display: flex; align-items: center; justify-content: space-between; color: #dff7ec; padding: 8px 0; }
+    .summary-row + .summary-row { border-top: 1px dashed rgba(168,224,200,0.2); }
+    .summary-total { font-weight: 800; font-size: 18px; color: #ffffff; }
+
+    /* PIX details */
+    .pix-box { background: rgba(0,44,28,0.6); border: 1px dashed rgba(168,224,200,0.35); border-radius: 12px; padding: 14px; display: grid; grid-template-columns: 120px 1fr; gap: 14px; align-items: center; }
+    .qr { width: 120px; height: 120px; background: repeating-linear-gradient(45deg, rgba(255,255,255,0.08) 0 6px, rgba(255,255,255,0.02) 6px 12px); border-radius: 8px; display: grid; place-items: center; color: #bfe9d3; font-size: 12px; }
+    .copy-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 8px; }
+    .copy-input { background: rgba(0,0,0,0.4); border: 1px solid rgba(168,224,200,0.25); color: #d9ffee; padding: 10px 12px; border-radius: 10px; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .copy-btn { background: rgba(0,104,55,0.9); color: #fff; border: none; padding: 10px 12px; border-radius: 10px; cursor: pointer; }
+  </style>
+</head>
+
+<body>
+  <header class="main-header">
+    <div class="header-container">
+      <a href="./casino-lobby.html" class="brand" title="Voltar ao Cassino">
+        <img src="../public/faria.png" alt="Faria" class="ortiz-logo" />
+      </a>
+
+      <div class="user-controls">
+
+        <a class="action-button deposit-btn" href="./depositar.html">
+          <i class="fa fa-plus-circle"></i>
+          DEPOSITAR
+        </a>
+
+        <a class="action-button outline" href="./charts.html">
+          <i class="fa fa-line-chart"></i>
+          Relatórios
+        </a>
+
+        <div class="balance">
+          <i class="fa fa-wallet"></i>
+          <span class="amount" id="topBalance">R$ 1000,00</span>
+        </div>
+
+        <div class="user-menu">
+          <button class="profile-toggle" type="button" onclick="toggleUserMenu()">
+          <div class="user-avatar"><i class="fa fa-user-circle"></i></div>
+            <span class="user-name">Igor Sarmento</span>
+            <i class="fa fa-chevron-down"></i>
+          </button>
+          <div class="dropdown-menu">
+            <a href="./meu-perfil.html" class="menu-item"><i class="fa fa-user"></i> Meu Perfil</a>
+            <a href="#" class="menu-item"><i class="fa fa-history"></i> Histórico</a>
+            <div class="divider"></div>
+            <a href="#" class="menu-item"><i class="fa fa-sign-out"></i> Sair</a>
+          </div>
+      </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrapper">
+    <div class="page-title">
+      <i class="fa fa-wallet"></i>
+      <h2 style="margin:0; font-size:22px;">Depositar</h2>
+    </div>
+
+    <div class="container">
+      <div class="deposit-card">
+        <div class="deposit-grid">
+
+          <!-- Formulário de Depósito -->
+          <section>
+            <h3 class="section-title">Detalhes do Depósito</h3>
+
+            <div class="field">
+              <label class="label" for="amount">Valor</label>
+              <div class="amount-wrap">
+                <span class="amount-prefix">R$</span>
+                <input id="amount" class="input" type="number" min="10" step="10" placeholder="100,00" />
+              </div>
+              <div class="quick-amounts" style="margin-top:8px;">
+                <button type="button" class="chip" data-amt="50">R$ 50</button>
+                <button type="button" class="chip" data-amt="100">R$ 100</button>
+                <button type="button" class="chip" data-amt="200">R$ 200</button>
+                <button type="button" class="chip" data-amt="500">R$ 500</button>
+              </div>
+              <small class="helper">Depósito mínimo R$ 10,00</small>
+            </div>
+
+            <div class="field" style="margin-top:16px;">
+              <label class="label">Método de pagamento</label>
+              <div class="methods" id="methods">
+                <button class="method active" data-method="pix"><i class="fab fa-pix fa-fw"></i> PIX</button>
+                <button class="method" data-method="card"><i class="fa fa-credit-card fa-fw"></i> Cartão</button>
+                <button class="method" data-method="boleto"><i class="fa fa-barcode fa-fw"></i> Boleto</button>
+              </div>
+            </div>
+
+            <!-- Detalhes dinâmicos -->
+            <div class="field" id="details" style="margin-top:12px;">
+              <!-- PIX (default) -->
+              <div class="pix" data-pane="pix">
+                <div class="pix-box">
+                  <div class="qr">QR PIX</div>
+                  <div>
+                    <div class="label" style="margin-bottom:6px;">Copia e Cola</div>
+                    <div class="copy-row">
+                      <div class="copy-input" id="pixKey">00020126580014BR.GOV.BCB.PIX0114+55 11 99999-9999520400005303986540.005802BR5920EMPRESA EXEMPLO SA6009Sao Paulo62070503***6304ABCD</div>
+                      <button class="copy-btn" id="copyPix">Copiar</button>
+                    </div>
+                    <small class="helper">Abra seu app do banco e pague com PIX.</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cartão -->
+              <div class="card" data-pane="card" style="display:none;">
+                <div class="form-row two">
+                  <div class="field">
+                    <label class="label" for="cardNumber">Número do cartão</label>
+                    <input id="cardNumber" class="input" type="text" inputmode="numeric" maxlength="19" placeholder="0000 0000 0000 0000" />
+                  </div>
+                  <div class="field">
+                    <label class="label" for="cardName">Nome impresso</label>
+                    <input id="cardName" class="input" type="text" placeholder="NOME COMPLETO" />
+                  </div>
+                </div>
+                <div class="form-row two">
+                  <div class="field">
+                    <label class="label" for="cardExp">Validade</label>
+                    <input id="cardExp" class="input" type="text" placeholder="MM/AA" maxlength="5" />
+                  </div>
+                  <div class="field">
+                    <label class="label" for="cardCvv">CVV</label>
+                    <input id="cardCvv" class="input" type="password" placeholder="***" maxlength="4" />
+                  </div>
+                </div>
+                <small class="helper">Transação protegida. Não compartilhamos seus dados.</small>
+              </div>
+
+              <!-- Boleto -->
+              <div class="boleto" data-pane="boleto" style="display:none;">
+                <div class="field">
+                  <label class="label" for="cpf">CPF</label>
+                  <input id="cpf" class="input" type="text" placeholder="000.000.000-00" maxlength="14" />
+                </div>
+                <div class="field">
+                  <label class="label" for="email">E-mail para envio</label>
+                  <input id="email" class="input" type="email" placeholder="seuemail@exemplo.com" />
+                </div>
+                <small class="helper">O boleto vence em 2 dias úteis.</small>
+              </div>
+            </div>
+
+            <button id="submit" class="submit">Depositar agora</button>
+            <small class="helper">Ao continuar, você concorda com os termos e políticas.</small>
+          </section>
+
+          <!-- Resumo -->
+          <aside class="summary">
+            <h3 class="section-title" style="margin-bottom:6px;">Resumo</h3>
+            <div class="summary-row"><span>Método</span><strong id="sumMethod">PIX</strong></div>
+            <div class="summary-row"><span>Valor</span><strong id="sumAmount">R$ 0,00</strong></div>
+            <div class="summary-row"><span>Taxas</span><span>R$ 0,00</span></div>
+            <div class="summary-row"><span>Tempo</span><span id="sumEta">Instantâneo</span></div>
+            <div class="summary-row summary-total"><span>Total</span><span id="sumTotal">R$ 0,00</span></div>
+          </aside>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const amount = document.getElementById('amount');
+      const chips = Array.from(document.querySelectorAll('.chip'));
+      const methodsWrap = document.getElementById('methods');
+      const panes = {
+        pix: document.querySelector('[data-pane="pix"]'),
+        card: document.querySelector('[data-pane="card"]'),
+        boleto: document.querySelector('[data-pane="boleto"]'),
+      };
+      const sumMethod = document.getElementById('sumMethod');
+      const sumAmount = document.getElementById('sumAmount');
+      const sumTotal = document.getElementById('sumTotal');
+      const sumEta = document.getElementById('sumEta');
+
+      function brl(n){
+        const v = isFinite(n) ? n : 0;
+        return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+      }
+
+      function updateSummary(){
+        const v = parseFloat(amount.value || '0');
+        sumAmount.textContent = brl(v);
+        sumTotal.textContent = brl(v);
+      }
+
+      chips.forEach(c => c.addEventListener('click', () => {
+        amount.value = c.getAttribute('data-amt');
+        updateSummary();
+      }));
+      amount.addEventListener('input', updateSummary);
+
+      methodsWrap.addEventListener('click', (e) => {
+        const btn = e.target.closest('.method');
+        if(!btn) return;
+        methodsWrap.querySelectorAll('.method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const method = btn.getAttribute('data-method');
+        sumMethod.textContent = method === 'pix' ? 'PIX' : method === 'card' ? 'Cartão' : 'Boleto';
+        sumEta.textContent = method === 'pix' ? 'Instantâneo' : method === 'card' ? '1-5 min' : 'Até 2 dias úteis';
+        Object.values(panes).forEach(p => p.style.display = 'none');
+        panes[method].style.display = '';
+      });
+
+      // Copiar chave PIX
+      const copyBtn = document.getElementById('copyPix');
+      const pixKey = document.getElementById('pixKey');
+      copyBtn.addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(pixKey.textContent.trim()); copyBtn.textContent = 'Copiado!'; setTimeout(()=>copyBtn.textContent='Copiar', 1500);} catch (e) { alert('Falha ao copiar'); }
+      });
+
+      // Submit fake
+      document.getElementById('submit').addEventListener('click', () => {
+        const v = parseFloat(amount.value || '0');
+        if (!v || v < 10) { alert('Informe um valor mínimo de R$ 10,00.'); return; }
+        alert('Depósito iniciado: ' + brl(v));
+      });
+
+      // Top balance sync (demo)
+      try {
+        const topBalance = document.getElementById('topBalance');
+        if (topBalance) topBalance.textContent = 'R$ 1000,00';
+      } catch {}
+
+      // init
+      updateSummary();
+    })();
+
+    // Toggle menu dropdown (copiado do lobby)
+    function toggleUserMenu() {
+      const dropdown = document.querySelector('.dropdown-menu');
+      dropdown.classList.toggle('active');
+      document.addEventListener('click', function closeDropdown(e) {
+        const menu = document.querySelector('.user-menu');
+        if (!menu.contains(e.target)) {
+          dropdown.classList.remove('active');
+          document.removeEventListener('click', closeDropdown);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,548 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Backoffice de Gest&atilde;o de Frota</title>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" name="viewport" />
+
+    <!-- Fonts and icons -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,600,500" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+
+    <!-- CSS Files -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/paper-dashboard.css" rel="stylesheet" />
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+        }
+
+        .wrapper {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar[data-color="vehifleet"] {
+            background: linear-gradient(180deg, #0b5ed7, #0f172a);
+            color: #cbd5f5;
+            width: 260px;
+        }
+
+        .sidebar[data-color="vehifleet"] .logo {
+            padding: 1.75rem 1.5rem 1.25rem;
+        }
+
+        .sidebar[data-color="vehifleet"] .logo .simple-text {
+            color: #f8fafc;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .sidebar[data-color="vehifleet"] .logo i {
+            color: #ffd166;
+            margin-right: 0.65rem;
+        }
+
+        .sidebar[data-color="vehifleet"] .sidebar-wrapper {
+            padding: 0 1.25rem 1.5rem;
+            overflow-y: auto;
+            max-height: calc(100vh - 140px);
+        }
+
+        .sidebar[data-color="vehifleet"] .nav {
+            margin-top: 1rem;
+        }
+
+        .sidebar[data-color="vehifleet"] .nav li > a {
+            border-radius: 0.85rem;
+            color: #cbd5f5;
+            padding: 0.65rem 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .sidebar[data-color="vehifleet"] .nav li > a i {
+            color: #9bd5ff;
+            font-size: 0.95rem;
+        }
+
+        .sidebar[data-color="vehifleet"] .nav li:hover > a,
+        .sidebar[data-color="vehifleet"] .nav li.active > a {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .sidebar[data-color="vehifleet"] .nav li:hover > a i,
+        .sidebar[data-color="vehifleet"] .nav li.active > a i {
+            color: #fff;
+        }
+
+        .main-panel {
+            padding: 2rem;
+            overflow: auto;
+            width: calc(100% - 260px);
+            margin-left: 260px;
+        }
+
+        .top-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, rgba(14, 164, 233, 0.25), rgba(14, 164, 233, 0.08));
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            box-shadow: 0 20px 45px rgba(15, 15, 35, 0.45);
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            color: #e2e8f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.35rem 0.8rem;
+            border-radius: 999px;
+            letter-spacing: 0.01em;
+            font-weight: 600;
+            background: rgba(148, 163, 184, 0.25);
+            color: #f8fafc;
+            text-transform: uppercase;
+        }
+
+        .tag.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #bbf7d0;
+        }
+
+        .tag.warning {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fcd34d;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .metric-card {
+            background: rgba(15, 23, 42, 0.65);
+            border-radius: 1.25rem;
+            padding: 1.25rem;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 30px rgba(14, 164, 233, 0.15);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #94a3b8;
+        }
+
+        .metric-value {
+            font-size: 1.85rem;
+            font-weight: 700;
+            margin: 0.75rem 0;
+            color: #f9fafb;
+        }
+
+        .metric-extra {
+            font-size: 0.85rem;
+            color: #38bdf8;
+            font-weight: 600;
+        }
+
+        .section {
+            margin-bottom: 2.75rem;
+        }
+
+        .section-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #e2e8f0;
+        }
+
+        .section-title i {
+            color: #38bdf8;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card-dark {
+            background: rgba(15, 23, 42, 0.85);
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .card-dark h4 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin: 0;
+            color: #f8fafc;
+        }
+
+        .card-dark p,
+        .card-dark li {
+            color: #cbd5f5;
+            font-size: 0.92rem;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(148, 163, 184, 0.12);
+            border-radius: 1rem;
+            padding: 0.35rem 0.6rem;
+            font-size: 0.75rem;
+            color: #cbd5f5;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .pill i {
+            color: #38bdf8;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+        }
+
+        .status-card {
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 1.1rem;
+            padding: 1rem;
+            border: 1px dashed rgba(59, 130, 246, 0.35);
+        }
+
+        .status-card strong {
+            display: block;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: #38bdf8;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.35rem;
+        }
+
+        .status-card span {
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            line-height: 1.45;
+        }
+
+        .table {
+            color: #e2e8f0;
+        }
+
+        .table thead th {
+            border-bottom: none;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #94a3b8;
+        }
+
+        .table tbody tr {
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .table tbody td {
+            border-top: 1px solid rgba(148, 163, 184, 0.08);
+            font-size: 0.9rem;
+        }
+
+        .list-group-item {
+            background: rgba(15, 23, 42, 0.75);
+            border: 1px solid rgba(148, 163, 184, 0.08);
+            color: #e2e8f0;
+        }
+
+        pre.code-block {
+            background: rgba(2, 6, 23, 0.75);
+            border-radius: 1rem;
+            padding: 1rem 1.25rem;
+            font-size: 0.85rem;
+            color: #38bdf8;
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            overflow-x: auto;
+        }
+
+        .kanban {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .kanban-column {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 1.25rem;
+            border: 1px solid rgba(148, 163, 184, 0.12);
+            padding: 1.25rem;
+        }
+
+        .kanban-column h5 {
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.12em;
+            color: #94a3b8;
+            margin-bottom: 0.9rem;
+        }
+
+        .kanban-item {
+            background: rgba(2, 132, 199, 0.12);
+            color: #e0f2fe;
+            border-radius: 0.9rem;
+            padding: 0.75rem 0.9rem;
+            font-size: 0.88rem;
+            margin-bottom: 0.65rem;
+            border: 1px solid rgba(14, 164, 233, 0.25);
+        }
+
+        .kanban-item strong {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #bae6fd;
+        }
+
+        .badge-pill {
+            border-radius: 999px;
+            padding: 0.3rem 0.6rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+        }
+
+        footer {
+            margin-top: 2.5rem;
+            padding: 2rem 0 1rem 0;
+            border-top: 1px solid rgba(148, 163, 184, 0.12);
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+                border-radius: 0 0 2rem 2rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .main-panel {
+                padding: 1.5rem;
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="sidebar" data-color="vehifleet" data-active-color="info">
+            <div class="logo">
+                <a href="javascript:void(0)" class="simple-text logo-normal">
+                    <i class="fa fa-shield"></i>
+                    Gest&atilde;o de Frotas
+                </a>
+            </div>
+            <div class="sidebar-wrapper">
+                <ul class="nav">
+                    <li class="active">
+                        <a href="#visao">
+                            <i class="nc-icon nc-bank"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#metricas">
+                            <i class="nc-icon nc-chart-bar-32"></i>
+                            <p>Indicadores</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="cadastroveiculo.html">
+                            <i class="nc-icon nc-simple-add"></i>
+                            <p>Cadastro de Ve&iacute;culos</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="listarveiculos.html">
+                            <i class="nc-icon nc-bullet-list-67"></i>
+                            <p>Invent&aacute;rio da Frota</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <main class="main-panel">
+            <header class="top-header" id="visao">
+                <div class="hero w-100">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        <div>
+                            <h1>Backoffice de Gest&atilde;o de Ve&iacute;culos</h1>
+                            <p>Monitore cadastros, disponibilidade e manuten&ccedil;&otilde;es em um dashboard unificado. Utilize o menu lateral para abrir o cadastro ou consultar o invent&aacute;rio completo.</p>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge badge-pill badge-info">Release: Q4 2025</span>
+                            <span class="badge badge-pill badge-success">MVP Em Desenvolvimento</span>
+                        </div>
+                    </div>
+                    <div class="hero-tags mt-4">
+                        <span class="tag success">Prefeituras</span>
+                        <span class="tag">DRF + Bootstrap</span>
+                        <span class="tag warning">Auditoria</span>
+                        <span class="tag">Checklist Mobile</span>
+                        <span class="tag">Integra&ccedil;&otilde;es GPS</span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="metrics-grid" id="metricas">
+                <div class="metric-card">
+                    <span class="metric-label">Ve&iacute;culos cadastrados</span>
+                    <div class="metric-value" id="metric-total">0</div>
+                    <span class="metric-extra"><i class="fa fa-database"></i> Base sincronizada</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Dispon&iacute;veis</span>
+                    <div class="metric-value text-success" id="metric-available">0</div>
+                    <span class="metric-extra" id="metric-available-extra">-</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Alocados</span>
+                    <div class="metric-value text-info" id="metric-allocated">0</div>
+                    <span class="metric-extra" id="metric-allocated-extra">-</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-label">Em manuten&ccedil;&atilde;o</span>
+                    <div class="metric-value text-warning" id="metric-maintenance">0</div>
+                    <span class="metric-extra" id="metric-maintenance-extra">-</span>
+                </div>
+            </section>
+
+
+
+
+
+            <footer class="text-center">
+                <p>Vehifleet &copy; 2025 &mdash; Backoffice responsivo para gest&atilde;o de frotas municipais.</p>
+                <p>Contato: tecnologia@prefeitura.gov | SLA suporte: 8h &uacute;teis.</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Core JS Files -->
+    <script src="../assets/js/core/jquery.min.js"></script>
+    <script src="../assets/js/core/popper.min.js"></script>
+    <script src="../assets/js/core/bootstrap.min.js"></script>
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const vehicles = [
+                { plate: 'ABC-1234', status: 'disponivel' },
+                { plate: 'IJK-8899', status: 'alocado' },
+                { plate: 'BRA-7E45', status: 'manutencao' },
+                { plate: 'GHI-4567', status: 'disponivel' },
+                { plate: 'PQR-2210', status: 'alocado' },
+                { plate: 'STU-9012', status: 'disponivel' },
+                { plate: 'XYZ-4455', status: 'manutencao' },
+                { plate: 'LMN-5523', status: 'alocado' }
+            ];
+
+            const metricTotal = document.getElementById('metric-total');
+            const metricAvailable = document.getElementById('metric-available');
+            const metricAvailableExtra = document.getElementById('metric-available-extra');
+            const metricAllocated = document.getElementById('metric-allocated');
+            const metricAllocatedExtra = document.getElementById('metric-allocated-extra');
+            const metricMaintenance = document.getElementById('metric-maintenance');
+            const metricMaintenanceExtra = document.getElementById('metric-maintenance-extra');
+
+            const total = vehicles.length;
+            const available = vehicles.filter(function (vehicle) { return vehicle.status === 'disponivel'; }).length;
+            const allocated = vehicles.filter(function (vehicle) { return vehicle.status === 'alocado'; }).length;
+            const maintenance = vehicles.filter(function (vehicle) { return vehicle.status === 'manutencao'; }).length;
+
+            function percentage(value) {
+                if (!total) {
+                    return 0;
+                }
+                return Math.round((value / total) * 100);
+            }
+
+            if (metricTotal) {
+                metricTotal.textContent = total;
+            }
+            if (metricAvailable && metricAvailableExtra) {
+                metricAvailable.textContent = available;
+                metricAvailableExtra.innerHTML = '<i class="fa fa-check-circle"></i> ' + percentage(available) + '% da frota';
+            }
+            if (metricAllocated && metricAllocatedExtra) {
+                metricAllocated.textContent = allocated;
+                metricAllocatedExtra.innerHTML = '<i class="fa fa-id-badge"></i> ' + percentage(allocated) + '% em uso';
+            }
+            if (metricMaintenance && metricMaintenanceExtra) {
+                metricMaintenance.textContent = maintenance;
+                metricMaintenanceExtra.innerHTML = '<i class="fa fa-wrench"></i> ' + percentage(maintenance) + '% em oficina';
+            }
+        });
+    </script>
+</body>
+
+</html>
+
+
+
+
+

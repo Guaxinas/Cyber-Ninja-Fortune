@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>Cyber Ninja Fortune - Neon Slot Game</title>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="viewport" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="../assets/css/paper-dashboard.css?v=2.1.1" rel="stylesheet" />
+  <style>
+    :root {
+      --neon-pink: #ff00ff;
+      --neon-blue: #00ffff;
+      --neon-purple: #bf00ff;
+      --dark-bg: #0a0a0f;
+      --panel-bg: rgba(10, 10, 20, 0.88);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Orbitron', 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, rgba(191, 0, 255, 0.25), transparent 60%),
+                  radial-gradient(circle at bottom, rgba(0, 255, 255, 0.2), transparent 60%),
+                  var(--dark-bg);
+      color: #f3f4ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255, 0, 255, 0.04) 1px, transparent 1px),
+                  linear-gradient(0deg, rgba(0, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body.overdrive-active {
+      background: radial-gradient(circle at center, rgba(255, 0, 255, 0.25), transparent 55%),
+                  radial-gradient(circle at bottom, rgba(255, 255, 0, 0.15), transparent 60%),
+                  #050508;
+    }
+
+    .slot-layout {
+      width: min(1100px, 100%);
+      position: relative;
+      z-index: 1;
+    }
+
+    .slot-card {
+      background: var(--panel-bg);
+      border: 1px solid rgba(191, 0, 255, 0.45);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 35px rgba(255, 0, 255, 0.25);
+      backdrop-filter: blur(8px);
+      margin: 0 auto;
+    }
+
+    .slot-header h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: 0.15em;
+      color: var(--neon-pink);
+      text-transform: uppercase;
+      text-shadow: 0 0 12px rgba(255, 0, 255, 0.9);
+    }
+
+    .slot-header p {
+      margin: 0.5rem 0 0;
+      color: var(--neon-blue);
+      letter-spacing: 0.1em;
+    }
+
+    .stats {
+      margin: 2.5rem 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .stats div {
+      background: rgba(4, 4, 10, 0.65);
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      border-radius: 16px;
+      padding: 1rem 1.25rem;
+      text-align: center;
+      box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.08), 0 0 15px rgba(0, 255, 255, 0.15);
+    }
+
+    .stats label {
+      display: block;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      color: rgba(0, 255, 255, 0.75);
+      margin-bottom: 0.35rem;
+    }
+
+    .stats span {
+      display: block;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--neon-pink);
+      text-shadow: 0 0 8px rgba(255, 0, 255, 0.7);
+    }
+
+    .stats .rtp {
+      font-size: 0.75rem;
+      color: var(--neon-blue);
+      margin-top: 0.35rem;
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.18);
+    }
+
+    #game-canvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      background: rgba(5, 5, 12, 0.85);
+      margin: 0 auto;
+    }
+
+    .controls {
+      margin-top: 2.5rem;
+    }
+
+    .controls .form-group label {
+      letter-spacing: 0.15em;
+      color: var(--neon-blue);
+    }
+
+    .controls select {
+      background: rgba(5, 5, 15, 0.85);
+      border: 1px solid rgba(191, 0, 255, 0.5);
+      color: var(--neon-pink);
+      width: 100%;
+    }
+
+    .controls .info {
+      color: var(--neon-blue);
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+    }
+
+    .controls .info span {
+      color: var(--neon-pink);
+    }
+
+    .btn {
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-weight: 600;
+    }
+
+    .btn-spin {
+      background: linear-gradient(135deg, rgba(255, 0, 255, 0.85), rgba(0, 255, 255, 0.85));
+      border: none;
+      color: #0f0f18;
+      padding: 0.85rem 2.5rem;
+      box-shadow: 0 0 25px rgba(255, 0, 255, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-spin:hover:not(:disabled) {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 0 35px rgba(255, 0, 255, 0.55);
+    }
+
+    .btn-spin:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-deposit {
+      background: rgba(0, 0, 0, 0.65);
+      border: 1px solid rgba(0, 255, 255, 0.45);
+      color: var(--neon-blue);
+      padding: 0.85rem 2rem;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-deposit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 28px rgba(0, 255, 255, 0.4);
+    }
+
+    .btn-help {
+      background: rgba(0, 0, 0, 0.65);
+      border: 1px solid rgba(255, 0, 255, 0.35);
+      color: var(--neon-purple);
+      padding: 0.75rem 1.8rem;
+      box-shadow: 0 0 16px rgba(255, 0, 255, 0.18);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+    }
+
+    .btn-help:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 24px rgba(255, 0, 255, 0.35);
+      color: var(--neon-pink);
+    }
+
+    body.help-open {
+      overflow: hidden;
+    }
+
+    .help-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .help-modal.active {
+      display: flex;
+    }
+
+    .help-modal__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(5, 5, 15, 0.85);
+      backdrop-filter: blur(6px);
+    }
+
+    .help-modal__panel {
+      position: relative;
+      width: min(520px, 92vw);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: rgba(12, 12, 24, 0.95);
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      border-radius: 18px;
+      padding: 1.75rem 1.5rem;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 255, 255, 0.3);
+      color: #eff6ff;
+    }
+
+    .help-modal__header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .help-modal__title {
+      font-size: 1.5rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--neon-blue);
+      margin: 0;
+    }
+
+    .help-close {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+
+    .help-close:hover {
+      color: var(--neon-pink);
+    }
+
+    .language-toggle {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .language-toggle__label {
+      letter-spacing: 0.1em;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: rgba(0, 255, 255, 0.7);
+    }
+
+    .language-toggle__btn {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      color: rgba(0, 255, 255, 0.75);
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .language-toggle__btn.active {
+      background: linear-gradient(135deg, rgba(0, 255, 255, 0.25), rgba(255, 0, 255, 0.25));
+      border-color: rgba(255, 0, 255, 0.45);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+    }
+
+    .help-audio-toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.25rem;
+      margin-bottom: 1.25rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid rgba(0, 255, 255, 0.25);
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 18px rgba(0, 255, 255, 0.12);
+    }
+
+    .help-audio-toggle span {
+      letter-spacing: 0.08em;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .help-audio-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .help-audio-copy small {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: rgba(0, 255, 255, 0.7);
+      text-transform: uppercase;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-flex;
+      width: 52px;
+      height: 28px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      cursor: pointer;
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .switch:focus-within {
+      box-shadow: 0 0 16px rgba(0, 255, 255, 0.4);
+      border-color: rgba(255, 0, 255, 0.4);
+    }
+
+    .switch-slider {
+      position: absolute;
+      inset: 2px;
+      border-radius: 999px;
+      background: rgba(0, 255, 255, 0.2);
+      transition: transform 0.25s ease, background 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 4px;
+    }
+
+    .switch-slider::after {
+      content: '';
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(255, 0, 255, 0.9), rgba(0, 255, 255, 0.9));
+      box-shadow: 0 0 12px rgba(255, 0, 255, 0.5);
+      transition: transform 0.25s ease;
+    }
+
+    .switch input:checked + .switch-slider {
+      background: rgba(255, 0, 255, 0.25);
+      justify-content: flex-end;
+      padding-left: 0;
+      padding-right: 4px;
+    }
+
+    .switch input:checked + .switch-slider::after {
+      transform: translateX(0);
+      box-shadow: 0 0 14px rgba(0, 255, 255, 0.6);
+    }
+
+    .help-modal__content h3 {
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      color: var(--neon-pink);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .help-rules {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .help-rules li {
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid rgba(255, 0, 255, 0.25);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      letter-spacing: 0.03em;
+      box-shadow: 0 0 18px rgba(255, 0, 255, 0.1);
+    }
+
+    .help-modal__footer {
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 0.06em;
+    }
+
+    .win-banner {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      opacity: 0;
+      pointer-events: none;
+      font-family: 'Orbitron', 'Segoe UI', sans-serif;
+      font-size: clamp(2.5rem, 10vw, 5rem);
+      letter-spacing: 0.25em;
+      color: #fff;
+      text-transform: uppercase;
+      text-shadow:
+        0 0 12px rgba(255, 0, 255, 0.8),
+        0 0 22px rgba(0, 255, 255, 0.6),
+        0 0 40px rgba(255, 255, 255, 0.4);
+      z-index: 2500;
+      filter: drop-shadow(0 0 12px rgba(255, 0, 255, 0.65));
+    }
+
+    .win-banner.visible {
+      animation: winBannerPop 1.4s ease-out forwards;
+    }
+
+    .win-banner span {
+      display: inline-block;
+      position: relative;
+      padding: 0.2em 0.4em;
+    }
+
+    .win-banner span::before,
+    .win-banner span::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 2px solid rgba(255, 0, 255, 0.45);
+      border-radius: 16px;
+      filter: blur(0);
+      opacity: 0.8;
+    }
+
+    .win-banner span::after {
+      inset: -0.35em;
+      border-color: rgba(0, 255, 255, 0.25);
+      filter: blur(6px);
+      opacity: 0.6;
+    }
+
+    @keyframes winBannerPop {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+      }
+      20% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+      40% {
+        transform: translate(-50%, -50%) scale(1);
+        text-shadow:
+          0 0 16px rgba(255, 0, 255, 0.9),
+          0 0 32px rgba(0, 255, 255, 0.75),
+          0 0 46px rgba(255, 255, 255, 0.5);
+      }
+      80% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.85);
+      }
+    }
+
+    .win-flash {
+      animation: winFlash 0.6s ease-in-out 2;
+    }
+
+    @keyframes winFlash {
+      0%, 100% {
+        filter: brightness(1);
+      }
+
+      50% {
+        filter: brightness(1.6);
+        box-shadow: 0 0 35px rgba(255, 0, 255, 0.35);
+      }
+    }
+
+    @keyframes buttonPulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(255, 0, 255, 0.45);
+      }
+
+      50% {
+        transform: scale(1.06);
+        box-shadow: 0 0 35px rgba(0, 255, 255, 0.6);
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 2rem 1rem;
+        justify-content: flex-start;
+        align-items: stretch;
+      }
+
+      .slot-card {
+        padding: 1.75rem 1.5rem;
+      }
+
+      .stats {
+        gap: 1rem;
+      }
+
+      .stats span {
+        font-size: 1.8rem;
+      }
+
+      .controls .row {
+        row-gap: 1.25rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .slot-card {
+        padding: 1.5rem 1.25rem;
+      }
+
+      .slot-header h1 {
+        font-size: clamp(1.8rem, 8vw, 2.3rem);
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stats div {
+        padding: 0.85rem 0.9rem;
+      }
+
+      .stats span {
+        font-size: 1.6rem;
+      }
+
+      .controls .row > div {
+        flex: 0 0 100%;
+        max-width: 100%;
+        text-align: center !important;
+      }
+
+      .controls .info {
+        margin-top: 0.5rem;
+      }
+
+      .help-modal__panel {
+        padding: 1.5rem 1.25rem;
+      }
+
+      .language-toggle {
+        gap: 0.4rem;
+      }
+
+      .language-toggle__btn {
+        flex: 1 1 120px;
+        text-align: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 220px;
+      }
+
+      .btn-spin,
+      .btn-deposit {
+        padding-inline: 1.5rem;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .stats span {
+        font-size: 1.4rem;
+      }
+
+      .controls .row {
+        row-gap: 0.75rem;
+      }
+
+      .help-modal__panel {
+        width: min(480px, 94vw);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="slot-layout">
+      <div class="slot-card">
+        <div class="slot-header text-center">
+        <h1 data-i18n="headerTitle">Cyber Ninja Fortune</h1>
+        <p data-i18n="headerSubtitle">Entre no dojo virtual e reclame seu destino</p>
+      </div>
+
+      <div class="stats">
+        <div>
+          <label id="stats-credits-label" data-i18n="statsCredits">Créditos</label>
+          <span id="credits">1000</span>
+          <div class="rtp"><span data-i18n="statsRTP">RTP</span>: <span id="rtp">96,8%</span></div>
+        </div>
+        <div>
+          <label id="stats-win-label" data-i18n="statsWin">Ganho</label>
+          <span id="last-win">0</span>
+        </div>
+        <div>
+          <label id="stats-multiplier-label" data-i18n="statsMultiplier">Multiplicador</label>
+          <span id="multiplier">1x</span>
+        </div>
+      </div>
+
+      <div class="canvas-wrapper">
+        <canvas id="game-canvas" width="860" height="640"></canvas>
+      </div>
+
+      <div class="controls">
+        <div class="row align-items-center">
+          <div class="col-md-4">
+            <div class="form-group mb-0">
+              <label id="bet-amount-label" for="bet-amount" data-i18n="betLabel">VALOR DA APOSTA</label>
+              <select id="bet-amount" class="form-control">
+                <option value="1">1 CRÉDITO</option>
+                <option value="2">2 CRÉDITOS</option>
+                <option value="5">5 CRÉDITOS</option>
+                <option value="10">10 CRÉDITOS</option>
+                <option value="20">20 CRÉDITOS</option>
+                <option value="50">50 CRÉDITOS</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4 text-center">
+            <div style="display:flex; gap:12px; justify-content:center; align-items:center; flex-wrap:wrap;">
+              <button id="spin-button" class="btn btn-lg btn-spin" data-i18n="spinButton">Jogar</button>
+              <button id="deposit-button" class="btn btn-lg btn-deposit" data-i18n="depositButton">Depositar</button>
+              <button id="help-button" class="btn btn-lg btn-help" type="button" data-i18n="helpButton">Ajuda</button>
+            </div>
+          </div>
+          <div class="col-md-4 text-md-right text-center">
+            <div class="info"><span data-i18n="paylinesLabel">LINHAS DE PAGAMENTO</span>: <span id="paylines-value">25</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="help-modal" class="help-modal" aria-hidden="true">
+    <div class="help-modal__backdrop" data-close-help></div>
+    <div class="help-modal__panel" role="dialog" aria-modal="true" aria-labelledby="help-title">
+      <div class="help-modal__header">
+        <h2 id="help-title" class="help-modal__title" data-i18n="helpTitle">Ajuda</h2>
+        <button type="button" class="help-close" data-close-help data-i18n="helpClose">Fechar</button>
+      </div>
+
+      <div class="language-toggle">
+        <span class="language-toggle__label" data-i18n="helpLanguageLabel">Idioma</span>
+        <button type="button" class="language-toggle__btn" data-language-option="pt">
+          <span data-i18n="langOptionPt">Português</span>
+        </button>
+        <button type="button" class="language-toggle__btn" data-language-option="en">
+          <span data-i18n="langOptionEn">Inglês</span>
+        </button>
+      </div>
+
+      <div class="help-audio-toggle">
+        <div class="help-audio-copy">
+          <span id="sound-toggle-label" data-i18n="soundToggleLabel">Som do jogo</span>
+          <small id="sound-toggle-status">Ativado</small>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="sound-toggle" checked>
+          <span class="switch-slider"></span>
+        </label>
+      </div>
+
+      <div class="help-modal__content">
+        <h3 data-i18n="helpRulesTitle">Como vencer</h3>
+        <ul class="help-rules" id="help-rules-list">
+          <li>Combine 3 ou mais símbolos na linha central para ganhar.</li>
+          <li>O símbolo Cyber Ninja é coringa e substitui outros símbolos.</li>
+          <li>Vitórias seguidas ativam multiplicadores e o modo Overdrive.</li>
+          <li>Aumente sua aposta para multiplicar os prêmios potenciais.</li>
+        </ul>
+      </div>
+
+      <div class="help-modal__footer" data-i18n="helpFooterNote">
+        Lembre-se: o modo Overdrive ativa animações especiais, mas não garante vitórias.
+      </div>
+    </div>
+  </div>
+
+  <div id="win-banner" class="win-banner" aria-hidden="true">
+    <span data-i18n="winBanner">VITÓRIA!</span>
+  </div>
+
+  <script src="../assets/js/core/jquery.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script>
+    const SYMBOLS = {
+      CYBER_NINJA: { name: 'Cyber Ninja', value: 1000, isWild: true },
+      ENERGY_KATANA: { name: 'Energy Katana', value: 500 },
+      NEURAL_CHIP: { name: 'Neural Chip', value: 250 },
+      CYBER_MASK: { name: 'Digital Oni Mask', value: 200 },
+      NEON_SHURIKEN: { name: 'Neon Shuriken', value: 150 },
+      DATAPAD: { name: 'Datapad', value: 100 },
+      ACE: { name: 'Ace', value: 50 },
+      KING: { name: 'King', value: 40 },
+      QUEEN: { name: 'Queen', value: 30 },
+      JACK: { name: 'Jack', value: 20 },
+      TEN: { name: 'Ten', value: 10 }
+    };
+
+    const config = {
+      reels: 5,
+      rows: 4,
+      symbolSize: 140,
+      spinTime: 2200,
+      symbols: Object.keys(SYMBOLS),
+      minMatch: 3,
+      paylines: 25,
+      rtp: 96.8,
+      volatility: 'high'
+    };
+
+    const translations = {
+      pt: {
+        headerTitle: 'Cyber Ninja Fortune',
+        headerSubtitle: 'Entre no dojo virtual e reclame seu destino',
+        statsCredits: 'Créditos',
+        statsWin: 'Ganho',
+        statsMultiplier: 'Multiplicador',
+        statsRTP: 'RTP',
+        betLabel: 'VALOR DA APOSTA',
+        betOptions: [
+          { value: 1, label: '1 CRÉDITO' },
+          { value: 2, label: '2 CRÉDITOS' },
+          { value: 5, label: '5 CRÉDITOS' },
+          { value: 10, label: '10 CRÉDITOS' },
+          { value: 20, label: '20 CRÉDITOS' },
+          { value: 50, label: '50 CRÉDITOS' }
+        ],
+        spinButton: 'Jogar',
+        depositButton: 'Depositar',
+        helpButton: 'Ajuda',
+        paylinesLabel: 'LINHAS DE PAGAMENTO',
+        paylinesValue: '25',
+        insufficientCredits: 'CRÉDITOS INSUFICIENTES',
+        depositMessage: 'Depositar - recurso não implementado',
+        winMessage: 'GANHOU! {amount} CRÉDITOS!',
+        multiplierSuffix: 'x',
+        soundToggleLabel: 'Som do jogo',
+        soundStatusOn: 'Ativado',
+        soundStatusOff: 'Silenciado',
+        helpTitle: 'Ajuda',
+        helpClose: 'Fechar',
+        helpLanguageLabel: 'Idioma',
+        langOptionPt: 'Português',
+        langOptionEn: 'Inglês',
+        helpRulesTitle: 'Como vencer',
+        helpRules: [
+          'Combine 3 ou mais símbolos na linha central para ganhar.',
+          'O símbolo Cyber Ninja é coringa e substitui outros símbolos.',
+          'Vitórias seguidas ativam multiplicadores e o modo Overdrive.',
+          'Aumente sua aposta para multiplicar os prêmios potenciais.'
+        ],
+        helpFooterNote: 'Lembre-se: o modo Overdrive ativa animações especiais, mas não garante vitórias.',
+        winBanner: 'VITÓRIA!'
+      },
+      en: {
+        headerTitle: 'Cyber Ninja Fortune',
+        headerSubtitle: 'Enter the virtual dojo and claim your destiny',
+        statsCredits: 'Credits',
+        statsWin: 'Win',
+        statsMultiplier: 'Multiplier',
+        statsRTP: 'RTP',
+        betLabel: 'BET AMOUNT',
+        betOptions: [
+          { value: 1, label: '1 CREDIT' },
+          { value: 2, label: '2 CREDITS' },
+          { value: 5, label: '5 CREDITS' },
+          { value: 10, label: '10 CREDITS' },
+          { value: 20, label: '20 CREDITS' },
+          { value: 50, label: '50 CREDITS' }
+        ],
+        spinButton: 'Spin',
+        depositButton: 'Deposit',
+        helpButton: 'Help',
+        paylinesLabel: 'PAYLINES',
+        paylinesValue: '25',
+        insufficientCredits: 'INSUFFICIENT CREDITS',
+        depositMessage: 'Deposit feature not implemented yet',
+        winMessage: 'WIN! {amount} CREDITS!',
+        multiplierSuffix: 'x',
+        soundToggleLabel: 'Game sound',
+        soundStatusOn: 'On',
+        soundStatusOff: 'Muted',
+        helpTitle: 'Help',
+        helpClose: 'Close',
+        helpLanguageLabel: 'Language',
+        langOptionPt: 'Portuguese',
+        langOptionEn: 'English',
+        helpRulesTitle: 'How to Win',
+        helpRules: [
+          'Match 3 or more symbols on the center payline to score a win.',
+          'Cyber Ninja symbols act as wilds and substitute any other symbol.',
+          'Back-to-back wins trigger multipliers and Overdrive mode.',
+          'Increase your bet to boost potential payouts.'
+        ],
+        helpFooterNote: 'Remember: Overdrive adds flair to the reels but does not guarantee wins.',
+        winBanner: 'WIN'
+      }
+    };
+
+    const state = {
+      credits: 1000,
+      spinning: false,
+      currentBet: 1,
+      lastWin: 0,
+      reelPositions: Array(config.reels).fill(0),
+      symbols: Array(config.reels).fill([]),
+      winningSymbols: [],
+      consecutiveWins: 0,
+      isOverdrive: false,
+      multiplier: 1,
+      freeSpins: 0,
+      startTime: null,
+      debug: false,
+      language: 'pt',
+      audioMuted: false
+    };
+
+    const canvas = document.getElementById('game-canvas');
+    const ctx = canvas.getContext('2d');
+    const helpModal = document.getElementById('help-modal');
+    const winBanner = document.getElementById('win-banner');
+
+    function t(key) {
+      const langPack = translations[state.language] || translations.en;
+      if (Object.prototype.hasOwnProperty.call(langPack, key)) {
+        return langPack[key];
+      }
+      const fallback = translations.en;
+      return Object.prototype.hasOwnProperty.call(fallback, key) ? fallback[key] : key;
+    }
+
+    function formatNumber(value) {
+      const locale = state.language === 'pt' ? 'pt-BR' : 'en-US';
+      return value.toLocaleString(locale);
+    }
+
+    function formatRTP(value) {
+      const locale = state.language === 'pt' ? 'pt-BR' : 'en-US';
+      return value.toLocaleString(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%';
+    }
+
+    function formatWinMessage(amount) {
+      const template = t('winMessage') || 'WIN! {amount} CREDITS!';
+      return template.replace('{amount}', amount);
+    }
+
+    function updateLanguageToggle() {
+      document.querySelectorAll('[data-language-option]').forEach(button => {
+        const isActive = button.dataset.languageOption === state.language;
+        button.classList.toggle('active', isActive);
+        button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+    }
+
+    function updateSoundToggleUI() {
+      const toggle = document.getElementById('sound-toggle');
+      const status = document.getElementById('sound-toggle-status');
+      if (toggle) {
+        toggle.checked = !state.audioMuted;
+        toggle.setAttribute('aria-label', t('soundToggleLabel'));
+        toggle.setAttribute('role', 'switch');
+        toggle.setAttribute('aria-checked', toggle.checked ? 'true' : 'false');
+      }
+      if (status) {
+        status.textContent = state.audioMuted ? t('soundStatusOff') : t('soundStatusOn');
+      }
+    }
+
+    function applyTranslations() {
+      const langPack = translations[state.language] || translations.en;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const value = t(key);
+        if (typeof value === 'string') {
+          el.textContent = value;
+        }
+      });
+
+      const betSelect = document.getElementById('bet-amount');
+      if (betSelect) {
+        const currentValue = state.currentBet.toString();
+        betSelect.innerHTML = '';
+        (langPack.betOptions || translations.en.betOptions).forEach(option => {
+          const opt = document.createElement('option');
+          opt.value = option.value;
+          opt.textContent = option.label;
+          if (option.value.toString() === currentValue) {
+            opt.selected = true;
+          }
+          betSelect.appendChild(opt);
+        });
+        betSelect.value = currentValue;
+      }
+
+      const paylinesValue = document.getElementById('paylines-value');
+      if (paylinesValue) {
+        paylinesValue.textContent = langPack.paylinesValue || translations.en.paylinesValue || '25';
+      }
+
+      const helpRulesList = document.getElementById('help-rules-list');
+      if (helpRulesList) {
+        helpRulesList.innerHTML = '';
+        const rules = Array.isArray(langPack.helpRules) ? langPack.helpRules : translations.en.helpRules;
+        rules.forEach(text => {
+          const li = document.createElement('li');
+          li.textContent = text;
+          helpRulesList.appendChild(li);
+        });
+      }
+
+      updateLanguageToggle();
+      updateSoundToggleUI();
+    }
+
+    function setLanguage(lang) {
+      if (!translations[lang]) {
+        return;
+      }
+      state.language = lang;
+      applyTranslations();
+      updateUI();
+    }
+
+    function openHelp() {
+      if (!helpModal) return;
+      helpModal.classList.add('active');
+      helpModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('help-open');
+    }
+
+    function closeHelp() {
+      if (!helpModal) return;
+      helpModal.classList.remove('active');
+      helpModal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('help-open');
+    }
+
+    let winBannerTimer = null;
+
+    function triggerWinBanner() {
+      if (!winBanner) return;
+      if (winBannerTimer) {
+        clearTimeout(winBannerTimer);
+        winBannerTimer = null;
+      }
+      winBanner.classList.remove('visible');
+      void winBanner.offsetWidth;
+      winBanner.classList.add('visible');
+      winBanner.setAttribute('aria-hidden', 'false');
+      if (!state.audioMuted) {
+        audioEngine.playWinSound();
+      }
+      winBannerTimer = setTimeout(() => {
+        winBanner.classList.remove('visible');
+        winBanner.setAttribute('aria-hidden', 'true');
+        winBannerTimer = null;
+      }, 1600);
+    }
+
+    function hideWinBanner() {
+      if (!winBanner) return;
+      if (winBannerTimer) {
+        clearTimeout(winBannerTimer);
+        winBannerTimer = null;
+      }
+      winBanner.classList.remove('visible');
+      winBanner.setAttribute('aria-hidden', 'true');
+    }
+
+    const audioEngine = {
+      context: null,
+      masterGain: null,
+      backgroundGain: null,
+      backgroundTimer: null,
+      backgroundLoopLength: 8,
+      hatBuffer: null,
+      isEnabled: false,
+      masterVolume: 0.6,
+      muted: false,
+      spinSound: null,
+      ensureContext() {
+        if (this.context) {
+          if (this.context.state === 'suspended') {
+            this.context.resume();
+          }
+          if (this.masterGain) {
+            const now = this.context.currentTime;
+            const target = this.muted ? 0.0001 : this.masterVolume;
+            this.masterGain.gain.setTargetAtTime(target, now, 0.05);
+          }
+          return true;
+        }
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContext) {
+            return false;
+          }
+          this.context = new AudioContext();
+          this.masterGain = this.context.createGain();
+          this.masterGain.gain.value = this.muted ? 0.0001 : this.masterVolume;
+          this.masterGain.connect(this.context.destination);
+
+          this.backgroundGain = this.context.createGain();
+          this.backgroundGain.gain.value = 0.25;
+          this.backgroundGain.connect(this.masterGain);
+          if (!this.hatBuffer) {
+            const length = Math.floor(this.context.sampleRate * 0.08);
+            const buffer = this.context.createBuffer(1, length, this.context.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < length; i++) {
+              const decay = 1 - i / length;
+              data[i] = (Math.random() * 2 - 1) * decay * decay;
+            }
+            this.hatBuffer = buffer;
+          }
+          this.isEnabled = true;
+          return true;
+        } catch (err) {
+          console.warn('Audio context could not be created', err);
+          return false;
+        }
+      },
+      setMuted(flag) {
+        this.muted = flag;
+        if (!this.context) {
+          return;
+        }
+        const now = this.context.currentTime;
+        const target = flag ? 0.0001 : this.masterVolume;
+        if (this.masterGain) {
+          this.masterGain.gain.cancelScheduledValues(now);
+          this.masterGain.gain.setTargetAtTime(target, now, 0.12);
+        }
+        if (flag) {
+          this.stopReelSpin();
+          this.stopBackground();
+        } else {
+          this.startBackground();
+        }
+      },
+      startBackground() {
+        if (this.muted) return;
+        if (!this.ensureContext()) return;
+        const now = this.context.currentTime;
+        if (this.backgroundGain) {
+          this.backgroundGain.gain.cancelScheduledValues(now);
+          this.backgroundGain.gain.setTargetAtTime(0.32, now, 0.8);
+        }
+        if (this.backgroundTimer) return;
+        const durationMs = this.playBackgroundLoop();
+        const scheduleNext = () => {
+          const nextDuration = this.playBackgroundLoop();
+          this.backgroundTimer = setTimeout(scheduleNext, nextDuration);
+        };
+        this.backgroundTimer = setTimeout(scheduleNext, durationMs);
+      },
+      stopBackground() {
+        if (this.backgroundTimer) {
+          clearTimeout(this.backgroundTimer);
+          this.backgroundTimer = null;
+        }
+        if (this.backgroundGain) {
+          this.backgroundGain.gain.setTargetAtTime(0, this.context.currentTime, 0.6);
+        }
+      },
+      playBackgroundLoop() {
+        if (this.muted) return 4000;
+        if (!this.context || !this.backgroundGain) return 4000;
+        const ctx = this.context;
+        const tempo = 96;
+        const beat = 60 / tempo;
+        const bars = 2;
+        const loopLength = beat * 4 * bars;
+        this.backgroundLoopLength = loopLength;
+        const start = ctx.currentTime + 0.05;
+
+        const scheduleBass = (freq, offset, duration = 1.4) => {
+          const osc = ctx.createOscillator();
+          osc.type = 'sawtooth';
+          const gain = ctx.createGain();
+          const noteStart = start + offset;
+          gain.gain.setValueAtTime(0.0001, noteStart);
+          gain.gain.linearRampToValueAtTime(0.22, noteStart + 0.1);
+          gain.gain.linearRampToValueAtTime(0.14, noteStart + duration - 0.2);
+          gain.gain.exponentialRampToValueAtTime(0.0001, noteStart + duration);
+          osc.frequency.setValueAtTime(freq, noteStart);
+          osc.connect(gain);
+          gain.connect(this.backgroundGain);
+          osc.start(noteStart);
+          osc.stop(noteStart + duration + 0.1);
+        };
+
+        const scheduleChord = (notes, offset, duration) => {
+          notes.forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            osc.type = 'sine';
+            osc.detune.setValueAtTime((idx - 1) * 6, start + offset);
+            osc.frequency.setValueAtTime(freq, start + offset);
+            const gain = ctx.createGain();
+            const chordStart = start + offset;
+            gain.gain.setValueAtTime(0.0001, chordStart);
+            gain.gain.linearRampToValueAtTime(0.12 + idx * 0.02, chordStart + 0.18);
+            gain.gain.linearRampToValueAtTime(0.06, chordStart + duration - 0.2);
+            gain.gain.exponentialRampToValueAtTime(0.0001, chordStart + duration);
+            osc.connect(gain);
+            gain.connect(this.backgroundGain);
+            osc.start(chordStart);
+            osc.stop(chordStart + duration + 0.2);
+          });
+        };
+
+        const schedulePluck = (freq, offset) => {
+          const osc = ctx.createOscillator();
+          osc.type = 'triangle';
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.value = freq * 1.5;
+          const gain = ctx.createGain();
+          const noteStart = start + offset;
+          gain.gain.setValueAtTime(0.0001, noteStart);
+          gain.gain.linearRampToValueAtTime(0.16, noteStart + 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.0001, noteStart + 0.25);
+          osc.frequency.setValueAtTime(freq, noteStart);
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(this.backgroundGain);
+          osc.start(noteStart);
+          osc.stop(noteStart + 0.3);
+        };
+
+        const bassPattern = [
+          { time: 0, freq: 110 },
+          { time: beat * 2, freq: 130.81 },
+          { time: beat * 3, freq: 146.83 },
+          { time: beat * 4, freq: 110 },
+          { time: beat * 6, freq: 196 }
+        ];
+        bassPattern.forEach(note => scheduleBass(note.freq, note.time));
+
+        const chords = [
+          { time: 0, notes: [220, 261.63, 329.63] },
+          { time: beat * 2, notes: [174.61, 220, 261.63] },
+          { time: beat * 4, notes: [130.81, 164.81, 196] },
+          { time: beat * 6, notes: [196, 246.94, 293.66] }
+        ];
+        chords.forEach(chord => scheduleChord(chord.notes, chord.time, beat * 2.2));
+
+        const arpNotes = [
+          { time: beat * 0.5, freq: 659.25 },
+          { time: beat * 1.5, freq: 587.33 },
+          { time: beat * 2.5, freq: 523.25 },
+          { time: beat * 3.5, freq: 698.46 },
+          { time: beat * 4.5, freq: 659.25 },
+          { time: beat * 5.5, freq: 783.99 },
+          { time: beat * 6.5, freq: 739.99 },
+          { time: beat * 7.5, freq: 880 }
+        ];
+        arpNotes.forEach(note => schedulePluck(note.freq, note.time));
+
+        if (this.hatBuffer) {
+          for (let i = 0; i < 8; i++) {
+            const hatStart = start + i * beat;
+            const source = ctx.createBufferSource();
+            source.buffer = this.hatBuffer;
+            const hatGain = ctx.createGain();
+            hatGain.gain.setValueAtTime(0.0001, hatStart);
+            hatGain.gain.linearRampToValueAtTime(0.16, hatStart + 0.015);
+            hatGain.gain.exponentialRampToValueAtTime(0.0001, hatStart + 0.12);
+            source.connect(hatGain);
+            hatGain.connect(this.backgroundGain);
+            source.start(hatStart);
+            source.stop(hatStart + 0.15);
+          }
+        }
+
+        return loopLength * 1000;
+      },
+      playWinSound() {
+        if (this.muted) return;
+        if (!this.ensureContext()) return;
+        const now = this.context.currentTime;
+        const osc = this.context.createOscillator();
+        const gain = this.context.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(660, now);
+        osc.frequency.linearRampToValueAtTime(990, now + 0.25);
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.exponentialRampToValueAtTime(0.6, now + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+        gain.connect(this.masterGain);
+        osc.connect(gain);
+        osc.start(now);
+        osc.stop(now + 0.7);
+
+        const shimmer = this.context.createOscillator();
+        const shimmerGain = this.context.createGain();
+        shimmer.type = 'sine';
+        shimmer.frequency.setValueAtTime(1320, now);
+        shimmerGain.gain.setValueAtTime(0.0001, now);
+        shimmerGain.gain.exponentialRampToValueAtTime(0.15, now + 0.08);
+        shimmerGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
+        shimmerGain.connect(this.masterGain);
+        shimmer.connect(shimmerGain);
+        shimmer.start(now + 0.05);
+        shimmer.stop(now + 0.5);
+      },
+      playButtonClick() {
+        if (this.muted) return;
+        if (!this.ensureContext()) return;
+        const now = this.context.currentTime;
+        const osc = this.context.createOscillator();
+        const gain = this.context.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(420, now);
+        osc.frequency.exponentialRampToValueAtTime(720, now + 0.08);
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.5, now + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+        const clickFilter = this.context.createBiquadFilter();
+        clickFilter.type = 'highpass';
+        clickFilter.frequency.value = 200;
+        osc.connect(clickFilter);
+        clickFilter.connect(gain);
+        gain.connect(this.masterGain);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      },
+      startReelSpin() {
+        if (this.muted) return;
+        if (!this.ensureContext()) return;
+        this.stopReelSpin();
+        const now = this.context.currentTime;
+        const spinGain = this.context.createGain();
+        spinGain.gain.setValueAtTime(0.0001, now);
+        spinGain.gain.exponentialRampToValueAtTime(0.14, now + 0.25);
+        spinGain.connect(this.masterGain);
+
+        const oscLow = this.context.createOscillator();
+        oscLow.type = 'sawtooth';
+        oscLow.frequency.setValueAtTime(160, now);
+        oscLow.frequency.linearRampToValueAtTime(190, now + 1);
+
+        const oscHigh = this.context.createOscillator();
+        oscHigh.type = 'triangle';
+        oscHigh.frequency.setValueAtTime(420, now);
+        oscHigh.frequency.linearRampToValueAtTime(520, now + 1.2);
+
+        const lfo = this.context.createOscillator();
+        const lfoGain = this.context.createGain();
+        lfo.type = 'sine';
+        lfo.frequency.setValueAtTime(7, now);
+        lfoGain.gain.value = 35;
+        lfo.connect(lfoGain);
+        lfoGain.connect(oscLow.frequency);
+
+        const noiseBuffer = this.context.createBuffer(1, this.context.sampleRate * 0.6, this.context.sampleRate);
+        const data = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < data.length; i++) {
+          data[i] = (Math.random() * 2 - 1) * 0.4;
+        }
+        const noise = this.context.createBufferSource();
+        noise.buffer = noiseBuffer;
+        noise.loop = true;
+        const noiseFilter = this.context.createBiquadFilter();
+        noiseFilter.type = 'bandpass';
+        noiseFilter.frequency.value = 1200;
+        noiseFilter.Q.value = 6;
+        noise.connect(noiseFilter);
+        noiseFilter.connect(spinGain);
+
+        oscLow.connect(spinGain);
+        oscHigh.connect(spinGain);
+
+        oscLow.start(now);
+        oscHigh.start(now);
+        lfo.start(now);
+        noise.start(now);
+
+        this.spinSound = {
+          gain: spinGain,
+          nodes: [oscLow, oscHigh, lfo, noise],
+          stopTimeout: null
+        };
+      },
+      stopReelSpin() {
+        if (!this.spinSound || !this.context) return;
+        const { gain, nodes } = this.spinSound;
+        const now = this.context.currentTime;
+        if (gain) {
+          gain.gain.cancelScheduledValues(now);
+          gain.gain.setValueAtTime(gain.gain.value, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+        }
+        nodes.forEach(node => {
+          try {
+            node.stop(now + 0.3);
+          } catch (err) {
+            /* no-op */
+          }
+        });
+        this.spinSound.stopTimeout = setTimeout(() => {
+          if (gain) {
+            gain.disconnect();
+          }
+          this.spinSound = null;
+        }, 400);
+      }
+    };
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        audioEngine.stopBackground();
+        audioEngine.stopReelSpin();
+      } else if (audioEngine.isEnabled && !state.audioMuted) {
+        audioEngine.startBackground();
+      }
+    });
+
+    function createSymbolColors() {
+      return {
+        CYBER_NINJA: { main: '#ff00ff', glow: 'rgba(255, 0, 255, 0.35)', pattern: (x, y, size) => {
+          const gradient = ctx.createLinearGradient(x, y, x + size, y + size);
+          gradient.addColorStop(0, '#ff00ff');
+          gradient.addColorStop(1, '#00ffff');
+          return gradient;
+        } },
+        ENERGY_KATANA: { main: '#00ffff', glow: 'rgba(0, 255, 255, 0.35)', pattern: (x, y, size) => {
+          const gradient = ctx.createLinearGradient(x, y, x + size, y);
+          gradient.addColorStop(0, '#00ffff');
+          gradient.addColorStop(1, '#ffffff');
+          return gradient;
+        } },
+        NEURAL_CHIP: { main: '#ffff00', glow: 'rgba(255, 255, 0, 0.3)', pattern: () => '#ffff00' },
+        CYBER_MASK: { main: '#ff0066', glow: 'rgba(255, 0, 102, 0.3)', pattern: () => '#ff0066' },
+        NEON_SHURIKEN: { main: '#00ff66', glow: 'rgba(0, 255, 102, 0.25)', pattern: () => '#00ff66' },
+        DATAPAD: { main: '#0088ff', glow: 'rgba(0, 136, 255, 0.25)', pattern: () => '#0088ff' },
+        ACE: { main: '#ffffff', glow: 'rgba(255, 255, 255, 0.2)', pattern: () => '#ffffff' },
+        KING: { main: '#ffcc00', glow: 'rgba(255, 204, 0, 0.2)', pattern: () => '#ffcc00' },
+        QUEEN: { main: '#ff00ff', glow: 'rgba(255, 0, 255, 0.2)', pattern: () => '#ff00ff' },
+        JACK: { main: '#00ffcc', glow: 'rgba(0, 255, 204, 0.2)', pattern: () => '#00ffcc' },
+        TEN: { main: '#ff8800', glow: 'rgba(255, 136, 0, 0.2)', pattern: () => '#ff8800' }
+      };
+    }
+
+    const symbolColors = createSymbolColors();
+
+    function initSymbols() {
+      state.symbols = [];
+      for (let i = 0; i < config.reels; i++) {
+        const reelSymbols = [];
+        for (let j = 0; j < 20; j++) {
+          const rand = Math.random();
+          let symbol;
+          if (rand < 0.05) {
+            symbol = 'CYBER_NINJA';
+          } else if (rand < 0.15) {
+            symbol = ['ENERGY_KATANA', 'NEURAL_CHIP'][Math.floor(Math.random() * 2)];
+          } else if (rand < 0.35) {
+            symbol = ['CYBER_MASK', 'NEON_SHURIKEN', 'DATAPAD'][Math.floor(Math.random() * 3)];
+          } else {
+            symbol = ['ACE', 'KING', 'QUEEN', 'JACK', 'TEN'][Math.floor(Math.random() * 5)];
+          }
+          reelSymbols.push(symbol);
+        }
+        state.symbols.push(reelSymbols);
+      }
+    }
+
+    function drawSymbol(symbol, x, y, size) {
+      const padding = 10;
+      const innerSize = size - padding * 2;
+
+      ctx.fillStyle = '#10131d';
+      ctx.fillRect(x, y, size, size);
+
+      const color = symbolColors[symbol];
+      ctx.strokeStyle = color.glow;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x + 2, y + 2, size - 4, size - 4);
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(x + padding, y + padding, innerSize, innerSize);
+      ctx.clip();
+      ctx.fillStyle = color.pattern(x + padding, y + padding, innerSize);
+
+      switch (symbol) {
+        case 'CYBER_NINJA':
+          drawNinjaSymbol(x + padding, y + padding, innerSize);
+          break;
+        case 'ENERGY_KATANA':
+          drawKatanaSymbol(x + padding, y + padding, innerSize);
+          break;
+        case 'NEURAL_CHIP':
+          drawChipSymbol(x + padding, y + padding, innerSize);
+          break;
+        case 'CYBER_MASK':
+          drawMaskSymbol(x + padding, y + padding, innerSize);
+          break;
+        case 'NEON_SHURIKEN':
+          drawShurikenSymbol(x + padding, y + padding, innerSize);
+          break;
+        case 'DATAPAD':
+          drawDatapadSymbol(x + padding, y + padding, innerSize);
+          break;
+        default:
+          drawCardSymbol(x + padding, y + padding, innerSize, symbol);
+      }
+
+      const glowGradient = ctx.createRadialGradient(
+        x + size / 2, y + size / 2, 0,
+        x + size / 2, y + size / 2, size / 2
+      );
+      glowGradient.addColorStop(0, color.glow);
+      glowGradient.addColorStop(1, 'transparent');
+      ctx.fillStyle = glowGradient;
+      ctx.fillRect(x, y, size, size);
+      ctx.restore();
+    }
+
+    function drawNinjaSymbol(x, y, size) {
+      ctx.beginPath();
+      ctx.arc(x + size / 2, y + size / 2, size / 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.fillRect(x + size / 4, y + size / 3, size / 2, size / 6);
+    }
+
+    function drawKatanaSymbol(x, y, size) {
+      ctx.beginPath();
+      ctx.moveTo(x + size / 4, y + size * 3 / 4);
+      ctx.lineTo(x + size * 3 / 4, y + size / 4);
+      ctx.lineTo(x + size * 4 / 5, y + size / 5);
+      ctx.lineTo(x + size * 4 / 5, y + size / 4);
+      ctx.lineTo(x + size / 4, y + size * 4 / 5);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawChipSymbol(x, y, size) {
+      ctx.fillRect(x + size / 4, y + size / 4, size / 2, size / 2);
+      ctx.strokeStyle = '#000000';
+      ctx.strokeRect(x + size / 8, y + size / 8, size * 3 / 4, size * 3 / 4);
+      ctx.beginPath();
+      ctx.moveTo(x, y + size / 2);
+      ctx.lineTo(x + size, y + size / 2);
+      ctx.moveTo(x + size / 2, y);
+      ctx.lineTo(x + size / 2, y + size);
+      ctx.stroke();
+    }
+
+    function drawMaskSymbol(x, y, size) {
+      ctx.beginPath();
+      ctx.moveTo(x + size / 4, y + size / 3);
+      ctx.quadraticCurveTo(x + size / 2, y, x + size * 3 / 4, y + size / 3);
+      ctx.quadraticCurveTo(x + size, y + size * 2 / 3, x + size * 3 / 4, y + size * 3 / 4);
+      ctx.quadraticCurveTo(x + size / 2, y + size, x + size / 4, y + size * 3 / 4);
+      ctx.quadraticCurveTo(x, y + size * 2 / 3, x + size / 4, y + size / 3);
+      ctx.fill();
+    }
+
+    function drawShurikenSymbol(x, y, size) {
+      ctx.beginPath();
+      ctx.moveTo(x + size / 2, y);
+      ctx.lineTo(x + size * 3 / 4, y + size / 2);
+      ctx.lineTo(x + size / 2, y + size);
+      ctx.lineTo(x + size / 4, y + size / 2);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawDatapadSymbol(x, y, size) {
+      ctx.fillRect(x + size / 6, y + size / 6, size * 2 / 3, size * 2 / 3);
+      ctx.strokeStyle = '#000000';
+      for (let i = 0; i < 3; i++) {
+        ctx.beginPath();
+        ctx.moveTo(x + size / 4, y + size * (0.3 + i * 0.2));
+        ctx.lineTo(x + size * 3 / 4, y + size * (0.3 + i * 0.2));
+        ctx.stroke();
+      }
+    }
+
+    function drawCardSymbol(x, y, size, symbol) {
+      const label = symbol === 'TEN' ? '10' : symbol.charAt(0);
+      const col = symbolColors[symbol] ? symbolColors[symbol].main : '#ffffff';
+      ctx.fillStyle = col;
+      ctx.font = `bold ${size / 2}px Orbitron`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, x + size / 2, y + size / 2);
+
+      if (Math.random() < 0.1) {
+        const glitchX = Math.random() * 4 - 2;
+        const glitchY = Math.random() * 4 - 2;
+        ctx.fillStyle = 'rgba(255, 0, 255, 0.5)';
+        ctx.fillText(label, x + size / 2 + glitchX, y + size / 2 + glitchY);
+      }
+    }
+
+    function drawReels() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawCyberpunkBackground();
+
+      const startX = (canvas.width - (config.reels * config.symbolSize)) / 2;
+      const startY = (canvas.height - (config.rows * config.symbolSize)) / 2;
+
+      drawScanlines();
+
+      for (let reel = 0; reel < config.reels; reel++) {
+        const reelArray = state.symbols[reel];
+        if (!reelArray || reelArray.length === 0) {
+          continue;
+        }
+        const reelLen = reelArray.length;
+        const pos = state.reelPositions[reel];
+        const topIndex = Math.floor(pos) % reelLen;
+        const frac = pos - Math.floor(pos);
+        const pixelOffset = frac * config.symbolSize;
+
+        for (let row = 0; row < config.rows + 1; row++) {
+          const symbolIndex = (topIndex + row) % reelLen;
+          const symbol = reelArray[symbolIndex];
+          const x = startX + (reel * config.symbolSize);
+          const y = startY + ((row - 1) * config.symbolSize) + pixelOffset;
+
+          if (Math.random() < 0.01) {
+            drawGlitchEffect(x, y, config.symbolSize);
+          }
+
+          drawSymbol(symbol, x, y, config.symbolSize);
+
+          if ((SYMBOLS[symbol] && SYMBOLS[symbol].isWild) || state.winningSymbols.includes(symbol)) {
+            drawNeonGlow(x, y, config.symbolSize);
+          }
+        }
+      }
+
+      if (state.isOverdrive) {
+        drawOverdriveEffect();
+      }
+    }
+
+    function drawCyberpunkBackground() {
+      ctx.strokeStyle = 'rgba(0, 255, 255, 0.1)';
+      ctx.lineWidth = 1;
+
+      for (let y = 0; y < canvas.height; y += 20) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+
+      for (let x = 0; x < canvas.width; x += 20) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+    }
+
+    function drawScanlines() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+      for (let y = 0; y < canvas.height; y += 2) {
+        ctx.fillRect(0, y, canvas.width, 1);
+      }
+    }
+
+    function drawGlitchEffect(x, y, size) {
+      const glitchHeight = Math.random() * size / 4;
+      const glitchY = y + Math.random() * (size - glitchHeight);
+
+      ctx.fillStyle = 'rgba(255, 0, 255, 0.5)';
+      ctx.fillRect(x, glitchY, size, glitchHeight);
+
+      ctx.fillStyle = 'rgba(0, 255, 255, 0.35)';
+      ctx.fillRect(x + Math.random() * 4 - 2, glitchY, size, glitchHeight / 2);
+    }
+
+    function drawNeonGlow(x, y, size) {
+      const gradient = ctx.createRadialGradient(
+        x + size / 2, y + size / 2, size / 4,
+        x + size / 2, y + size / 2, size
+      );
+      gradient.addColorStop(0, 'rgba(255, 0, 255, 0.35)');
+      gradient.addColorStop(1, 'transparent');
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      ctx.fillStyle = gradient;
+      ctx.fillRect(x - size / 2, y - size / 2, size * 2, size * 2);
+      ctx.restore();
+    }
+
+    function drawOverdriveEffect() {
+      ctx.fillStyle = 'rgba(255, 0, 255, 0.08)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = 'rgba(255, 255, 0, 0.3)';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(12, 12, canvas.width - 24, canvas.height - 24);
+    }
+
+    function showMessage(text) {
+      const message = document.createElement('div');
+      message.className = 'message';
+      message.textContent = text;
+      message.style.position = 'fixed';
+      message.style.top = '50%';
+      message.style.left = '50%';
+      message.style.transform = 'translate(-50%, -50%)';
+      message.style.background = 'rgba(0, 0, 0, 0.85)';
+      message.style.padding = window.innerWidth <= 480 ? '16px 24px' : '20px 40px';
+      message.style.borderRadius = '12px';
+      message.style.border = '2px solid #ff00ff';
+      message.style.color = '#ff00ff';
+      message.style.fontFamily = 'Orbitron, sans-serif';
+      message.style.fontSize = window.innerWidth <= 480 ? '18px' : '24px';
+      message.style.letterSpacing = '0.12em';
+      message.style.textShadow = '0 0 10px #ff00ff';
+      message.style.zIndex = '1000';
+      message.style.maxWidth = 'min(90vw, 360px)';
+      message.style.textAlign = 'center';
+      document.body.appendChild(message);
+      setTimeout(() => message.remove(), 2000);
+    }
+
+    function spin() {
+      if (state.spinning) return;
+
+      const bet = parseInt(document.getElementById('bet-amount').value, 10);
+      if (state.credits < bet) {
+        if (!state.audioMuted && audioEngine.ensureContext()) {
+          audioEngine.playButtonClick();
+        }
+        showMessage(t('insufficientCredits'));
+        return;
+      }
+
+      if (!state.audioMuted && audioEngine.ensureContext()) {
+        audioEngine.playButtonClick();
+        audioEngine.startBackground();
+      }
+
+      state.spinning = true;
+      state.currentBet = bet;
+      state.credits -= bet;
+      updateUI();
+      if (!state.audioMuted) {
+        audioEngine.startReelSpin();
+      }
+
+      if (state.consecutiveWins >= 5) {
+        state.isOverdrive = true;
+        document.body.classList.add('overdrive-active');
+      }
+
+      document.getElementById('spin-button').disabled = true;
+
+      const speeds = state.reelPositions.map(() => state.isOverdrive ? 4 + Math.random() * 2 : 2 + Math.random());
+      state.startTime = null;
+
+      function animate(timestamp) {
+        if (state.startTime === null) {
+          state.startTime = timestamp;
+        }
+        const elapsed = timestamp - state.startTime;
+
+        state.reelPositions = state.reelPositions.map((pos, index) => {
+          const duration = state.isOverdrive ? config.spinTime / 2 : config.spinTime;
+          if (elapsed < duration - index * 200) {
+            return (pos + speeds[index]) % state.symbols[index].length;
+          }
+          return Math.round(pos);
+        });
+
+        drawReels();
+
+        const duration = state.isOverdrive ? config.spinTime / 2 : config.spinTime;
+        if (elapsed < duration) {
+          requestAnimationFrame(animate);
+        } else {
+          finishSpin();
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function finishSpin() {
+      audioEngine.stopReelSpin();
+
+      for (let i = 0; i < state.reelPositions.length; i++) {
+        state.reelPositions[i] = Math.floor(state.reelPositions[i]) % state.symbols[i].length;
+      }
+      state.spinning = false;
+      document.getElementById('spin-button').disabled = false;
+
+      const result = state.symbols.map((reelArray, reelIndex) => {
+        const top = state.reelPositions[reelIndex];
+        const rows = [];
+        for (let row = 0; row < config.rows; row++) {
+          rows.push(reelArray[(top + row) % reelArray.length]);
+        }
+        return rows;
+      });
+
+      const middleIndex = Math.floor(config.rows / 2);
+      const middleRow = result.map(reel => reel[middleIndex]);
+      let target = middleRow[0];
+
+      if (SYMBOLS[target]?.isWild) {
+        for (let i = 1; i < middleRow.length; i++) {
+          if (!SYMBOLS[middleRow[i]]?.isWild) {
+            target = middleRow[i];
+            break;
+          }
+        }
+      }
+
+      let count = 1;
+      for (let i = 1; i < middleRow.length; i++) {
+        const symbol = middleRow[i];
+        if (symbol === target || SYMBOLS[symbol]?.isWild) {
+          count++;
+        } else {
+          break;
+        }
+      }
+
+      if (count >= config.minMatch) {
+        const symbolDef = SYMBOLS[target];
+        const win = symbolDef.value * state.currentBet * (count - 2) * state.multiplier;
+        state.lastWin = win;
+        state.credits += win;
+        state.winningSymbols = middleRow.slice(0, count);
+        state.consecutiveWins++;
+        canvas.classList.add('win-flash');
+        setTimeout(() => canvas.classList.remove('win-flash'), 500);
+        const formattedWin = formatNumber(win);
+        showMessage(formatWinMessage(formattedWin));
+        triggerWinBanner();
+      } else {
+        state.lastWin = 0;
+        state.winningSymbols = [];
+        state.consecutiveWins = 0;
+        state.multiplier = 1;
+        state.isOverdrive = false;
+        hideWinBanner();
+      }
+
+      updateUI();
+      drawReels();
+    }
+
+    function updateUI() {
+      document.getElementById('credits').textContent = formatNumber(state.credits);
+      document.getElementById('last-win').textContent = formatNumber(state.lastWin);
+      document.getElementById('multiplier').textContent = `${state.multiplier}${t('multiplierSuffix') || 'x'}`;
+      document.getElementById('rtp').textContent = formatRTP(config.rtp);
+
+      const spinButton = document.getElementById('spin-button');
+      if (state.isOverdrive) {
+        spinButton.style.animation = 'buttonPulse 0.5s infinite';
+        spinButton.style.boxShadow = '0 0 20px var(--neon-pink)';
+        document.body.classList.add('overdrive-active');
+      } else {
+        spinButton.style.animation = '';
+        spinButton.style.boxShadow = '';
+        document.body.classList.remove('overdrive-active');
+      }
+    }
+
+    function adjustForViewport() {
+      const wrapper = canvas.parentElement;
+      const rawWidth = wrapper ? wrapper.clientWidth : window.innerWidth;
+      const fallbackWidth = window.innerWidth || 320;
+      const containerWidth = Math.max(240, rawWidth || fallbackWidth || 320);
+      let horizontalPadding = containerWidth < 560 ? Math.max(16, Math.floor(containerWidth * 0.05)) : 40;
+      const maxAvailableWidth = containerWidth - horizontalPadding;
+
+      const maxSymbol = 160;
+      const minSymbol = containerWidth < 360 ? 40 : 52;
+
+      let symbolSize = Math.floor(maxAvailableWidth / config.reels);
+      symbolSize = Math.min(symbolSize, maxSymbol);
+      if (symbolSize < minSymbol) {
+        symbolSize = minSymbol;
+      }
+
+      let canvasPixelWidth = symbolSize * config.reels + horizontalPadding;
+      if (canvasPixelWidth > containerWidth) {
+        symbolSize = Math.floor((containerWidth - horizontalPadding) / config.reels);
+        symbolSize = Math.max(36, Math.min(symbolSize, maxSymbol));
+        canvasPixelWidth = symbolSize * config.reels + horizontalPadding;
+      }
+
+      const canvasPixelHeight = config.rows * symbolSize + horizontalPadding;
+
+      config.symbolSize = symbolSize;
+      canvas.width = canvasPixelWidth;
+      canvas.height = canvasPixelHeight;
+      canvas.style.width = `${canvasPixelWidth}px`;
+      canvas.style.height = `${canvasPixelHeight}px`;
+
+      drawReels();
+    }
+
+    function init() {
+      state.reelPositions = Array(config.reels).fill(0);
+      initSymbols();
+      adjustForViewport();
+      applyTranslations();
+      updateUI();
+      drawReels();
+
+      const spinButton = document.getElementById('spin-button');
+      if (spinButton) {
+        spinButton.addEventListener('click', spin);
+      }
+
+      const depositButton = document.getElementById('deposit-button');
+      if (depositButton) {
+        depositButton.addEventListener('click', () => showMessage(t('depositMessage')));
+      }
+
+      const helpButton = document.getElementById('help-button');
+      if (helpButton) {
+        helpButton.addEventListener('click', openHelp);
+      }
+
+      const betSelect = document.getElementById('bet-amount');
+      if (betSelect) {
+        betSelect.addEventListener('change', event => {
+          const value = parseInt(event.target.value, 10);
+          if (!Number.isNaN(value)) {
+            state.currentBet = value;
+          }
+        });
+      }
+
+      document.querySelectorAll('[data-close-help]').forEach(element => {
+        element.addEventListener('click', closeHelp);
+      });
+
+      document.querySelectorAll('[data-language-option]').forEach(button => {
+        button.addEventListener('click', () => setLanguage(button.dataset.languageOption));
+      });
+
+      const soundToggle = document.getElementById('sound-toggle');
+      if (soundToggle) {
+        soundToggle.addEventListener('change', () => {
+          state.audioMuted = !soundToggle.checked;
+          audioEngine.setMuted(state.audioMuted);
+          updateSoundToggleUI();
+        });
+      }
+
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && helpModal && helpModal.classList.contains('active')) {
+          closeHelp();
+        }
+      });
+
+      window.addEventListener('resize', adjustForViewport);
+
+      audioEngine.setMuted(state.audioMuted);
+    }
+
+    init();
+  </script>
+</body>
+</html>
